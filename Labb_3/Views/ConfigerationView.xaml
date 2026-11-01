@@ -19,13 +19,47 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                    Grid.Row="0"
+                    FontSize="12"
+                    Margin="10,5,0,5"
+                    FontWeight="Bold"
+                    Text="{Binding ActivePack.Name}" >
+                </TextBlock>
+
+                <Button Content="☷"
+                    Grid.Column="1"
+                    Width="20"
+                    Height="20"
+                    Margin="2"
+                    Command="{Binding SettingsCommand}" />
+
+                <Button Content="+"
+                    Grid.Column="2"
+                    Width="20"
+                    Height="20"
+                    Margin="2"
+                    Command="{Binding AddQuestionCommand}" />
+
+                <Button Content="−"
+                    Grid.Column="3"
+                    Width="20"
+                    Height="20"
+                    Margin="2"
+                    Command="{Binding RemoveQuestionCommand}" />
+            </Grid>
 
             <!-- Övre delen: namn och knappar -->
-            <TextBlock 
-                Grid.Row="0"
-                Text="{Binding ActivePack.Name}" >
-            </TextBlock>
+           
 
             <!-- Nedre delen: separat yta för frågorna -->
             <ListBox Grid.Row="1"
