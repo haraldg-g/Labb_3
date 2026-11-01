@@ -41,7 +41,7 @@
                     Width="20"
                     Height="20"
                     Margin="2"
-                    Command="{Binding SettingsCommand}" />
+                    Command="{Binding OpenPackOptionsCommand}" />
 
                 <Button Content="+"
                     Grid.Column="2"

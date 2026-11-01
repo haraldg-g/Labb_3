@@ -11,6 +11,7 @@ namespace Labb_3.ViewModels
         public RelayCommand ChangedPackNameCommand { get; }
         public RelayCommand AddQuestionCommand { get; private set; }
         public RelayCommand RemoveQuestionCommand { get; private set; }
+        public RelayCommand OpenPackOptionsCommand { get; private set; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
 
         public Question? SelectedQuestion
@@ -33,6 +34,12 @@ namespace Labb_3.ViewModels
             ChangedPackNameCommand = new RelayCommand(ChangePackName, CanChangePackName);
             AddQuestionCommand = new RelayCommand(AddQuestion);
             RemoveQuestionCommand = new RelayCommand(RemoveQuestion, CanRemoveQuestion);
+            OpenPackOptionsCommand = new RelayCommand(OpenPackOptions);
+        }
+
+        private void OpenPackOptions(object? obj)
+        {
+            throw new NotImplementedException();
         }
 
         private bool CanRemoveQuestion(object? arg)
