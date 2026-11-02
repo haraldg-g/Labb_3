@@ -13,12 +13,12 @@
                 <MenuItem Header="E_xit" InputGestureText="Alt+F4" />
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Copy"/>
-                <MenuItem Header="Paste"/>
-                <MenuItem Header="Test">
-                    <MenuItem Header="Copy"/>
-                    <MenuItem Header="Paste"/>
-                </MenuItem>
+                <MenuItem Header="_Add Question" InputGestureText="Insert" 
+                          Command="{Binding ConfigurationViewModel.AddQuestionCommand}" Icon="+" />
+                <MenuItem Header="_Remove Question" InputGestureText="Delete"
+                          Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}" Icon="-"/>
+                <MenuItem Header="Pack _Options" InputGestureText="Ctrl+O"
+                          Command="{Binding ConfigurationViewModel.OpenPackOptionsCommand}" Icon="☷"/>
             </MenuItem>
             <MenuItem Header="_View">
             </MenuItem>

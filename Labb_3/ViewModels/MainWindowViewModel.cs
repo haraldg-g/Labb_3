@@ -29,7 +29,7 @@ internal class MainWindowViewModel : ViewModelBase
         PlayerViewModel = new PlayerViewModel(this);
         ConfigurationViewModel = new ConfigurationViewModel(this);
 
-        var questionPack = new QuestionPack("Mina frågor!", Difficulty.Easy);
+        var questionPack = new QuestionPack("Mina frågor!", Difficulty.Medium);
         questionPack.Questions.Add(new Question("Vad heter sveriges huvudstad?", "Stockholm", "Oslo", "Göteborg", "London"));
         questionPack.Questions.Add(new Question("Vad är 2 + 3?", "5", "10", "8", "1"));
 

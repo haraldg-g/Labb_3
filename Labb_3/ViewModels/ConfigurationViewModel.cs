@@ -1,5 +1,6 @@
 ﻿using Labb_3.Models;
 using Labb_3.Command;
+using System.Windows;
 namespace Labb_3.ViewModels
 {
     internal class ConfigurationViewModel : ViewModelBase
@@ -13,6 +14,7 @@ namespace Labb_3.ViewModels
         public RelayCommand RemoveQuestionCommand { get; private set; }
         public RelayCommand OpenPackOptionsCommand { get; private set; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
+        public Array Difficulties => Enum.GetValues(typeof(Difficulty));
 
         public Question? SelectedQuestion
         {
@@ -39,7 +41,11 @@ namespace Labb_3.ViewModels
 
         private void OpenPackOptions(object? obj)
         {
-            throw new NotImplementedException();
+            
+            var window = new PackOptionsDialog();
+            window.Owner = Application.Current.MainWindow;
+            window.DataContext = this;
+            window.ShowDialog();
         }
 
         private bool CanRemoveQuestion(object? arg)
