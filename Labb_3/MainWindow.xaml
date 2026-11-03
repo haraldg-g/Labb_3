@@ -4,10 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Labb_3"
+        xmlns:viewmodels="clr-namespace:Labb_3.ViewModels"
         xmlns:views="clr-namespace:Labb_3.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:PlayerViewModel}" >
+            <views:PlayerView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:ConfigurationViewModel}">
+            <views:ConfigurationView/>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -15,7 +25,8 @@
         </Grid.RowDefinitions>
         
         <views:MenuView Grid.Row="0"/>
-        <views:PlayerView Grid.Row="1" />
-        <!--<views:ConfigurationView Grid.Row="1" />-->
+        <ContentControl Grid.Row="1"
+                        Content="{Binding CurrentView}">
+        </ContentControl>
     </Grid>
 </Window>

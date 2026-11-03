@@ -23,8 +23,7 @@ namespace Labb_3.ViewModels
         public List<string> ShuffledAnswers { get => _shuffledAnswers; }
 
         public RelayCommand NextQuestionCommand { get; }
-
-
+        public RelayCommand AnswerQuestionClickCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         public void RaiseActiveQuestionChanged() => RaisePropertyChanged(nameof(ActiveQuestion));
         public Question? ActiveQuestion { get => ActivePack?.Questions[CurrentQuestionIndex]; }
@@ -48,9 +47,14 @@ namespace Labb_3.ViewModels
             _mainWindowViewModel = mainWindowViewModel;
 
             NextQuestionCommand = new RelayCommand(NextQuestion, CanNextQuestion);
+            AnswerQuestionClickCommand = new RelayCommand(AnswerQuestionClick);
         }
 
-      
+        private void AnswerQuestionClick(object? obj)
+        {
+            throw new NotImplementedException();
+        }
+
 
         private bool CanNextQuestion(object? arg)
         {
