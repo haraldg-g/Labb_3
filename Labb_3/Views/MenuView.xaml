@@ -10,6 +10,9 @@
         <Menu>
             <MenuItem Header="_File">
                 <MenuItem Header="_New Question pack" />
+                <MenuItem Header="_Select Question pack" />
+                <MenuItem Header="_Delete Question pack" />
+                <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I"/>
                 <MenuItem Header="E_xit" InputGestureText="Alt+F4" />
             </MenuItem>
             <MenuItem Header="_Edit">
@@ -21,6 +24,12 @@
                           Command="{Binding ConfigurationViewModel.OpenPackOptionsCommand}" Icon="☷"/>
             </MenuItem>
             <MenuItem Header="_View">
+                <MenuItem Header="_Play" InputGestureText="Ctrl+P" 
+                          Command="{Binding }" Icon="" />
+                <MenuItem Header="_Edit" InputGestureText="Ctrl+E"
+                          Command="{Binding }" Icon=""/>
+                <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter"
+                          Command="{Binding }" Icon=""/>
             </MenuItem>
         </Menu>
     </Grid>
