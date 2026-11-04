@@ -37,6 +37,7 @@ internal class MainWindowViewModel : ViewModelBase
     
     public PlayerViewModel? PlayerViewModel { get; }
     public ConfigurationViewModel? ConfigurationViewModel { get; }
+    public void RaiseCurrentViewChanged() => RaisePropertyChanged(nameof(CurrentView));
 
 
     public MainWindowViewModel()
@@ -69,7 +70,10 @@ internal class MainWindowViewModel : ViewModelBase
     }
     private void StartQuiz(object? obj)
     {
-        throw new NotImplementedException();
+        PlayerViewModel?.GetActiveQuestionAnswers();
+        PlayerViewModel?.RaiseActiveQuestionChanged();
+        ChangeCurrentView(CurrentView);
+        RaiseCurrentViewChanged();
     }
 }
 

@@ -4,15 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="Labb_3.Views"
-             DataContext="{Binding PlayerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Labb_3;component/Styles/PlayerStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
+        
         <TextBlock Grid.Row="0"
                    Text="{Binding ActiveQuestion.Query}"
                    FontSize="28"
@@ -32,20 +40,48 @@
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
-
-        <Button Grid.Row="1"
-                Height="80" Margin="100,10,428,135"
-                Content="{Binding ActiveQuestion.ShuffledAnswers[0]}"/>
-        <Button Grid.Row="1"
-                Height="80" Margin="428,10,100,135"
-                Content="{Binding ActiveQuestion.ShuffledAnswers[1]}"/>
-        <Button Grid.Row="1"
-                Height="80" Margin="100,105,428,40"
-                Content="{Binding ActiveQuestion.ShuffledAnswers[2]}"/>
-        <Button Grid.Row="1"
-            Height="80" Margin="428,105,100,40"
-                Content="{Binding ActiveQuestion.ShuffledAnswers[3]}"/>
-
-
+        
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Button 
+                    Style="{StaticResource AnswerButtonStyle}"
+                    Content="{Binding ShuffledAnswers[0]}"
+                    Command="{Binding AnswerQuestionClickCommand}"
+                    CommandParameter="{Binding ShuffledAnswers[0]}" />
+                <Image Style="{StaticResource AnswerImageStyleIndex0}" />
+            </Grid>
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Button 
+                    Style="{StaticResource AnswerButtonStyle}"
+                    Content="{Binding ShuffledAnswers[1]}"
+                    Command="{Binding AnswerQuestionClickCommand}"
+                    CommandParameter="{Binding ShuffledAnswers[1]}"/>
+                <Image Style="{StaticResource AnswerImageStyleIndex1}" />
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Button 
+                    Style="{StaticResource AnswerButtonStyle}"
+                    Content="{Binding ShuffledAnswers[2]}"
+                    Command="{Binding AnswerQuestionClickCommand}"
+                    CommandParameter="{Binding ShuffledAnswers[2]}"/>
+                <Image Style="{StaticResource AnswerImageStyleIndex2}" />
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Button 
+                    Style="{StaticResource AnswerButtonStyle}"
+                    Content="{Binding ShuffledAnswers[3]}"
+                    Command="{Binding AnswerQuestionClickCommand}"
+                    CommandParameter="{Binding ShuffledAnswers[3]}"/>
+                <Image Style="{StaticResource AnswerImageStyleIndex3}" />
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

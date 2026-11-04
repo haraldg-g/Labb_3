@@ -25,7 +25,7 @@
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Play" InputGestureText="Ctrl+P" 
-                          Command="{Binding ChangeCurrentViewCommand}" Icon="x" />
+                          Command="{Binding StartQuizCommand}" Icon="x" />
                 <MenuItem Header="_Edit" InputGestureText="Ctrl+E"
                           Command="{Binding }" Icon=""/>
                 <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter"
