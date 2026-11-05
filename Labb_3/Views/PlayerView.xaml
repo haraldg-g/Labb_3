@@ -142,7 +142,8 @@
 
                 <Button HorizontalAlignment="Center" 
                     Padding="5"
-                    Margin="0,15">
+                    Margin="0,15"
+                    Command="{Binding RestartQuizCommand}">
                     <StackPanel Orientation="Horizontal">
                         <fa:IconBlock   
                             Icon="Rotate"

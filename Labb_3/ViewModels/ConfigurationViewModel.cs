@@ -2,6 +2,7 @@
 using Labb_3.Command;
 using System.Windows;
 using Labb_3.Dialogs;
+using Labb_3.Views;
 namespace Labb_3.ViewModels
 {
     internal class ConfigurationViewModel : ViewModelBase
@@ -35,13 +36,11 @@ namespace Labb_3.ViewModels
             _mainWindowViewModel = mainWindowViewModel;
 
             ChangedPackNameCommand = new RelayCommand(ChangePackName, CanChangePackName);
-            AddQuestionCommand = new RelayCommand(AddQuestion);
+            AddQuestionCommand = new RelayCommand(AddQuestion, CanAddQuestion);
             RemoveQuestionCommand = new RelayCommand(RemoveQuestion, CanRemoveQuestion);
-            OpenPackOptionsCommand = new RelayCommand(OpenPackOptions);
+            OpenPackOptionsCommand = new RelayCommand(OpenPackOptions, CanOpenPackOptions);
             OpenCreateNewQuestionPackCommand = new RelayCommand(OpenCreateNewQuestionPack);
         }
-
-        
 
         public void RaiseActivePackChanged() => RaisePropertyChanged(nameof(ActivePack));
 
@@ -53,6 +52,10 @@ namespace Labb_3.ViewModels
             window.ShowDialog();
         }
 
+        private bool CanOpenPackOptions(object? arg)
+        {
+            return _mainWindowViewModel?.CurrentView is not PlayerViewModel;
+        }
         private void OpenPackOptions(object? obj)
         {
             
@@ -61,18 +64,23 @@ namespace Labb_3.ViewModels
             window.DataContext = this;
             window.ShowDialog();
         }
-
         private bool CanRemoveQuestion(object? arg)
         {
-            return SelectedQuestion != null;
+            return SelectedQuestion != null && _mainWindowViewModel?.CurrentView is not PlayerViewModel;
         }
         private void RemoveQuestion(object? obj)
         {
+            if (SelectedQuestion == null)
+                return;
+
             ActivePack?.Questions.Remove(SelectedQuestion);
             SelectedQuestion = null;
 
         }
-
+        private bool CanAddQuestion(object? arg)
+        {
+            return _mainWindowViewModel?.CurrentView is not PlayerViewModel;
+        }
         private void AddQuestion(object? obj)
         {
             Question question = new Question("New Question", "", "", "", "");

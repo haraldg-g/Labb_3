@@ -8,13 +8,13 @@ namespace Labb_3.ViewModels;
 internal class MainWindowViewModel : ViewModelBase
 {
     private object? _currentView;
-    private QuestionPackViewModel _activePack;
+    private QuestionPackViewModel? _activePack;
 
     public PlayerViewModel? PlayerViewModel { get; }
     public ConfigurationViewModel? ConfigurationViewModel { get; }
-    public ObservableCollection<QuestionPackViewModel> Packs { get; }
-    public RelayCommand ChangeCurrentViewCommand { get; }
-    public RelayCommand StartQuizCommand { get; }
+    public ObservableCollection<QuestionPackViewModel> Packs { get; } = new();
+    public RelayCommand? ChangeCurrentViewCommand { get; }
+    public RelayCommand? StartQuizCommand { get; }
 
     public bool CanPlay => CurrentView != PlayerViewModel;
     public bool CanEdit => CurrentView != ConfigurationViewModel;
@@ -32,12 +32,12 @@ internal class MainWindowViewModel : ViewModelBase
         } 
     }
     
-    public QuestionPackViewModel ActivePack
+    public QuestionPackViewModel? ActivePack
     {
         get => _activePack;
         set
         { 
-            if(SetProperty(ref _activePack, value));
+            if(SetProperty(ref _activePack, value))
             {
                 ConfigurationViewModel?.RaiseActivePackChanged();
             }
@@ -46,6 +46,7 @@ internal class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
+
         PlayerViewModel = new PlayerViewModel(this);
         ConfigurationViewModel = new ConfigurationViewModel(this);
 
@@ -56,7 +57,7 @@ internal class MainWindowViewModel : ViewModelBase
         questionPack.Questions.Add(new Question("Vad är 2 + 3?", "5", "10", "8", "1"));
 
         ActivePack = new QuestionPackViewModel(questionPack);
-
+        
         ChangeCurrentViewCommand = new RelayCommand(ChangeCurrentView);
         StartQuizCommand = new RelayCommand(StartQuiz);
     }
@@ -76,8 +77,7 @@ internal class MainWindowViewModel : ViewModelBase
     }
     private void StartQuiz(object? obj)
     {
-        PlayerViewModel?.GetActiveQuestionAnswers();
-        PlayerViewModel?.RaiseActiveQuestionChanged();
+        PlayerViewModel?.StartQuiz();
         ChangeCurrentView(CurrentView);
         RaiseCurrentViewChanged();
     }

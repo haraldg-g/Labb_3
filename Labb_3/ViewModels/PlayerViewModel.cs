@@ -12,30 +12,31 @@ namespace Labb_3.ViewModels
     {
         private readonly MainWindowViewModel? _mainWindowViewModel;
         private int _currentQuestionIndex;
-        private string _selectedAnswer;
-        private List<string>? _shuffledAnswers;
+        private string? _selectedAnswer;
+        private List<string> _shuffledAnswers = new();
         private int _selectAnswerIndex;
         private int _correctAnswerIndex;
         private bool _hasAnswered = false;
         private bool _isAnswerCorrect = false;
         private int _correctAnswerCounter;
         private bool _showResults;
-        private int _counter = 0;
         private double _secondsRemaining = 30;
         private Stopwatch _stopwatch = new();
         private DispatcherTimer _timer = new();
 
         public RelayCommand NextQuestionCommand { get; }
         public RelayCommand AnswerQuestionClickCommand { get; }
+        public RelayCommand RestartQuizCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         public Question? ActiveQuestion { get => ActivePack?.Questions[CurrentQuestionIndex]; }
         public List<string> ShuffledAnswers { get => _shuffledAnswers; }
+        
 
         public int CorrectAnswerIndex { get => _correctAnswerIndex; set => SetProperty(ref _correctAnswerIndex, value); }
         public int SelectedAnswerIndex { get => _selectAnswerIndex; set => SetProperty(ref _selectAnswerIndex, value); }
         public bool HasAnswered { get => _hasAnswered; set => SetProperty(ref _hasAnswered, value); }
         public bool IsAnswerCorrect { get => _isAnswerCorrect; set => SetProperty(ref _isAnswerCorrect, value); }
-        public string SelectedAnswer { get => _selectedAnswer; set => SetProperty(ref _selectedAnswer, value); }
+        public string? SelectedAnswer { get => _selectedAnswer; set => SetProperty(ref _selectedAnswer, value); }
         public int CorrectAnswerCounter { get => _correctAnswerCounter; set => SetProperty(ref _correctAnswerCounter, value); }
         public bool ShowResults { get => _showResults; set => SetProperty(ref _showResults, value); }
         public double SecondsRemaining { get => _secondsRemaining; set => SetProperty(ref _secondsRemaining, value); }
@@ -65,17 +66,48 @@ namespace Labb_3.ViewModels
         {
             _mainWindowViewModel = mainWindowViewModel;
 
-
-            _stopwatch.Start();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
-            _timer.Start();
 
             NextQuestionCommand = new RelayCommand(NextQuestion);
             AnswerQuestionClickCommand = new RelayCommand(AnswerQuestionClick);
+            RestartQuizCommand = new RelayCommand(RestartQuiz);
         }
 
         public void RaiseActiveQuestionChanged() => RaisePropertyChanged(nameof(ActiveQuestion));
+
+        public void StartQuiz()
+        {
+            _timer.Stop();
+            _stopwatch.Restart();
+
+            SecondsRemaining = 30;
+            CurrentQuestionIndex = 0;
+            HasAnswered = false;
+
+            GetActiveQuestionAnswers();
+            RaiseActiveQuestionChanged();
+
+            _timer.Start();
+        }
+
+
+        private void RestartQuiz(object? obj)
+        {
+            _timer.Stop();
+            _stopwatch.Restart();
+
+            SecondsRemaining = 30;
+            CurrentQuestionIndex = 0;
+            HasAnswered = false;
+            ShowResults = false;
+            CorrectAnswerCounter = 0;
+
+            GetActiveQuestionAnswers();
+            RaiseActiveQuestionChanged();
+
+            _timer.Start();
+        }
 
         private async void AnswerQuestionClick(object? obj)
         {
@@ -129,18 +161,25 @@ namespace Labb_3.ViewModels
 
         public List<string> GetActiveQuestionAnswers()
         {
-            List<string> list = new List<string> { ActiveQuestion.CorrectAnswer, ActiveQuestion.IncorrectAnswers[0], ActiveQuestion.IncorrectAnswers[1], ActiveQuestion.IncorrectAnswers[2] };
+
+            Question? activeQuestion = ActiveQuestion;
+
+            if (activeQuestion == null)
+                return new List<string>();
+            
+            List<string> list = new List<string> { activeQuestion.CorrectAnswer, activeQuestion.IncorrectAnswers[0], activeQuestion.IncorrectAnswers[1], activeQuestion.IncorrectAnswers[2] };
             _shuffledAnswers = list;
             ShuffleOrder(_shuffledAnswers);
             RaisePropertyChanged(nameof(ShuffledAnswers));
             return _shuffledAnswers;
-
         }
         private async void Timer_Tick(object? sender, EventArgs e)
         {
             TimeSpan remaining = TimeSpan.FromSeconds(30) - _stopwatch.Elapsed;
             SecondsRemaining = Math.Max(0, (int)Math.Ceiling(remaining.TotalSeconds));
-            
+
+            if (ActiveQuestion == null)
+                return;
 
             if (SecondsRemaining <= 0)
             {
