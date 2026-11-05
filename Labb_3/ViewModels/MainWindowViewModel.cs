@@ -7,21 +7,31 @@ namespace Labb_3.ViewModels;
 
 internal class MainWindowViewModel : ViewModelBase
 {
+    private object? _currentView;
+    private QuestionPackViewModel _activePack;
+
+    public PlayerViewModel? PlayerViewModel { get; }
+    public ConfigurationViewModel? ConfigurationViewModel { get; }
     public ObservableCollection<QuestionPackViewModel> Packs { get; }
     public RelayCommand ChangeCurrentViewCommand { get; }
     public RelayCommand StartQuizCommand { get; }
 
-    private object? _currentView;
+    public bool CanPlay => CurrentView != PlayerViewModel;
+    public bool CanEdit => CurrentView != ConfigurationViewModel;
 
     public object? CurrentView
     {
         get => _currentView;
-        set => SetProperty(ref _currentView, value);
+        set
+        {
+            if (SetProperty(ref _currentView, value))
+            {
+                RaisePropertyChanged(nameof(CanPlay));
+                RaisePropertyChanged(nameof(CanEdit));
+            }
+        } 
     }
-
-   
-
-    private QuestionPackViewModel _activePack;
+    
     public QuestionPackViewModel ActivePack
     {
         get => _activePack;
@@ -33,12 +43,6 @@ internal class MainWindowViewModel : ViewModelBase
             }
         }
     }
-
-    
-    public PlayerViewModel? PlayerViewModel { get; }
-    public ConfigurationViewModel? ConfigurationViewModel { get; }
-    public void RaiseCurrentViewChanged() => RaisePropertyChanged(nameof(CurrentView));
-
 
     public MainWindowViewModel()
     {
@@ -56,6 +60,8 @@ internal class MainWindowViewModel : ViewModelBase
         ChangeCurrentViewCommand = new RelayCommand(ChangeCurrentView);
         StartQuizCommand = new RelayCommand(StartQuiz);
     }
+
+    public void RaiseCurrentViewChanged() => RaisePropertyChanged(nameof(CurrentView));
 
     public void ChangeCurrentView(object? obj)
     {

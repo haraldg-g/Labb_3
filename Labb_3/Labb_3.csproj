@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\Correct.png" />
     <Resource Include="Images\Incorrect.png" />
   </ItemGroup>

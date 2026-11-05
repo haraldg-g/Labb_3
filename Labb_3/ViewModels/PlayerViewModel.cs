@@ -16,33 +16,19 @@ namespace Labb_3.ViewModels
         private bool _hasAnswered = false;
         private bool _isAnswerCorrect = false;
 
+        public RelayCommand NextQuestionCommand { get; }
+        public RelayCommand AnswerQuestionClickCommand { get; }
+        public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
+        public Question? ActiveQuestion { get => ActivePack?.Questions[CurrentQuestionIndex]; }
+        public List<string> ShuffledAnswers { get => _shuffledAnswers; }
+
         public int CorrectAnswerIndex { get => _correctAnswerIndex; set => SetProperty(ref _correctAnswerIndex, value); }
         public int SelectedAnswerIndex { get => _selectAnswerIndex; set => SetProperty(ref _selectAnswerIndex, value); }
         public bool HasAnswered { get => _hasAnswered; set => SetProperty(ref _hasAnswered, value); }
         public bool IsAnswerCorrect { get => _isAnswerCorrect; set => SetProperty(ref _isAnswerCorrect, value); }
-
-
-        public Question? ActiveQuestion { get => ActivePack?.Questions[CurrentQuestionIndex]; }
-
         public string SelectedAnswer { get => _selectedAnswer; set => SetProperty(ref _selectedAnswer, value); }
 
-        public List<string> GetActiveQuestionAnswers()
-        {
-            List<string> list = new List<string> { ActiveQuestion.CorrectAnswer, ActiveQuestion.IncorrectAnswers[0], ActiveQuestion.IncorrectAnswers[1], ActiveQuestion.IncorrectAnswers[2] };
-            _shuffledAnswers = list;
-            ShuffleOrder(_shuffledAnswers);
-            RaisePropertyChanged(nameof(ShuffledAnswers));
-            return _shuffledAnswers;
-
-        }
-
-        public List<string> ShuffledAnswers { get => _shuffledAnswers; }
-
-        public RelayCommand NextQuestionCommand { get; }
-        public RelayCommand AnswerQuestionClickCommand { get; }
-        public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
-        public void RaiseActiveQuestionChanged() => RaisePropertyChanged(nameof(ActiveQuestion));
-        
+        public int CurrentQuestionNumber => CurrentQuestionIndex + 1;
 
         public int CurrentQuestionIndex 
         { 
@@ -70,6 +56,8 @@ namespace Labb_3.ViewModels
             NextQuestionCommand = new RelayCommand(NextQuestion);
             AnswerQuestionClickCommand = new RelayCommand(AnswerQuestionClick);
         }
+
+        public void RaiseActiveQuestionChanged() => RaisePropertyChanged(nameof(ActiveQuestion));
 
         private async void AnswerQuestionClick(object? obj)
         {
@@ -113,7 +101,15 @@ namespace Labb_3.ViewModels
             }
         }
 
-        public int CurrentQuestionNumber => CurrentQuestionIndex + 1;
+        public List<string> GetActiveQuestionAnswers()
+        {
+            List<string> list = new List<string> { ActiveQuestion.CorrectAnswer, ActiveQuestion.IncorrectAnswers[0], ActiveQuestion.IncorrectAnswers[1], ActiveQuestion.IncorrectAnswers[2] };
+            _shuffledAnswers = list;
+            ShuffleOrder(_shuffledAnswers);
+            RaisePropertyChanged(nameof(ShuffledAnswers));
+            return _shuffledAnswers;
+
+        }
 
         public List<string> ShuffleOrder(List<string> list)
         {

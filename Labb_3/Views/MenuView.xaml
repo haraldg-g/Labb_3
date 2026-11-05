@@ -3,33 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:local="clr-namespace:Labb_3.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Image}" x:Key="MenuItemHeaderStyle">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+    </UserControl.Resources>
     <Grid>
         <Menu>
             <MenuItem Header="_File">
-                <MenuItem Header="_New Question pack" />
-                <MenuItem Header="_Select Question pack" />
-                <MenuItem Header="_Delete Question pack" />
-                <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I"/>
-                <MenuItem Header="E_xit" InputGestureText="Alt+F4" />
+                <MenuItem Header="_New Question pack" Icon="{fa:Icon FolderPlus}"/>
+                <MenuItem Header="_Select Question pack" Icon="{fa:Icon FolderOpen}"/>
+                <MenuItem Header="_Delete Question pack" Icon="{fa:Icon FolderMinus}"/>
+                <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" Icon="{fa:Icon CloudArrowDown}"/>
+                <MenuItem Header="E_xit" InputGestureText="Alt+F4" Icon="{fa:Icon DoorOpen}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Add Question" InputGestureText="Insert" 
-                          Command="{Binding ConfigurationViewModel.AddQuestionCommand}" Icon="+" />
+                          Command="{Binding ConfigurationViewModel.AddQuestionCommand}" Icon="{fa:Icon Plus}" />
                 <MenuItem Header="_Remove Question" InputGestureText="Delete"
-                          Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}" Icon="-"/>
+                          Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}" Icon="{fa:Icon Minus}"/>
                 <MenuItem Header="Pack _Options" InputGestureText="Ctrl+O"
-                          Command="{Binding ConfigurationViewModel.OpenPackOptionsCommand}" Icon="☷"/>
+                          Command="{Binding ConfigurationViewModel.OpenPackOptionsCommand}" Icon="{fa:Icon Sliders}"/>
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Play" InputGestureText="Ctrl+P" 
-                          Command="{Binding StartQuizCommand}" Icon="x" />
-                <MenuItem Header="_Edit" InputGestureText="Ctrl+E"
-                          Command="{Binding }" Icon=""/>
-                <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter"
-                          Command="{Binding }" Icon=""/>
+                          Command="{Binding StartQuizCommand}" 
+                          IsEnabled="{Binding CanPlay}"
+                          Icon="{fa:Icon Play}"/>
+                <MenuItem Header="_Edit" InputGestureText="Ctrl+E" 
+                          Command="{Binding ChangeCurrentViewCommand}" 
+                          IsEnabled="{Binding CanEdit}"
+                          Icon="{fa:Icon Gears}"/>
+                <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter" 
+                          Command="{Binding }" 
+                          Icon=""/>
             </MenuItem>
         </Menu>
     </Grid>

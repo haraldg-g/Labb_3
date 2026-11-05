@@ -10,9 +10,9 @@ namespace Labb_3.ViewModels
 
 
         public RelayCommand ChangedPackNameCommand { get; }
-        public RelayCommand AddQuestionCommand { get; private set; }
-        public RelayCommand RemoveQuestionCommand { get; private set; }
-        public RelayCommand OpenPackOptionsCommand { get; private set; }
+        public RelayCommand AddQuestionCommand { get; }
+        public RelayCommand RemoveQuestionCommand { get; }
+        public RelayCommand OpenPackOptionsCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         public Array Difficulties => Enum.GetValues(typeof(Difficulty));
 
@@ -27,7 +27,6 @@ namespace Labb_3.ViewModels
                 }
             }
         }
-        public void RaiseActivePackChanged() => RaisePropertyChanged(nameof(ActivePack));
 
         public ConfigurationViewModel(MainWindowViewModel? mainWindowViewModel)
         {
@@ -38,6 +37,8 @@ namespace Labb_3.ViewModels
             RemoveQuestionCommand = new RelayCommand(RemoveQuestion, CanRemoveQuestion);
             OpenPackOptionsCommand = new RelayCommand(OpenPackOptions);
         }
+
+        public void RaiseActivePackChanged() => RaisePropertyChanged(nameof(ActivePack));
 
         private void OpenPackOptions(object? obj)
         {
