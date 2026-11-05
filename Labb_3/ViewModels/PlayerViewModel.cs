@@ -1,6 +1,7 @@
 ﻿using Labb_3.Command;
 using Labb_3.Models;
 using Labb_3.Views;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Windows;
@@ -23,12 +24,13 @@ namespace Labb_3.ViewModels
         private double _secondsRemaining = 30;
         private Stopwatch _stopwatch = new();
         private DispatcherTimer _timer = new();
+        private List<Question> _shuffledQuestions = new();
 
         public RelayCommand NextQuestionCommand { get; }
         public RelayCommand AnswerQuestionClickCommand { get; }
         public RelayCommand RestartQuizCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
-        public Question? ActiveQuestion { get => ActivePack?.Questions[CurrentQuestionIndex]; }
+        public Question? ActiveQuestion { get => _shuffledQuestions[CurrentQuestionIndex]; }
         public List<string> ShuffledAnswers { get => _shuffledAnswers; }
         
 
@@ -39,6 +41,8 @@ namespace Labb_3.ViewModels
         public string? SelectedAnswer { get => _selectedAnswer; set => SetProperty(ref _selectedAnswer, value); }
         public int CorrectAnswerCounter { get => _correctAnswerCounter; set => SetProperty(ref _correctAnswerCounter, value); }
         public bool ShowResults { get => _showResults; set => SetProperty(ref _showResults, value); }
+
+
         public double SecondsRemaining { get => _secondsRemaining; set => SetProperty(ref _secondsRemaining, value); }
 
         public int CurrentQuestionNumber => CurrentQuestionIndex + 1;
@@ -78,22 +82,9 @@ namespace Labb_3.ViewModels
 
         public void StartQuiz()
         {
-            _timer.Stop();
-            _stopwatch.Restart();
+            if (ActivePack == null)
+                return; 
 
-            SecondsRemaining = 30;
-            CurrentQuestionIndex = 0;
-            HasAnswered = false;
-
-            GetActiveQuestionAnswers();
-            RaiseActiveQuestionChanged();
-
-            _timer.Start();
-        }
-
-
-        private void RestartQuiz(object? obj)
-        {
             _timer.Stop();
             _stopwatch.Restart();
 
@@ -101,12 +92,18 @@ namespace Labb_3.ViewModels
             CurrentQuestionIndex = 0;
             HasAnswered = false;
             ShowResults = false;
-            CorrectAnswerCounter = 0;
 
+            _shuffledQuestions = ActivePack.Questions.ToList();
+            ShuffleOrder(_shuffledQuestions);
             GetActiveQuestionAnswers();
             RaiseActiveQuestionChanged();
 
             _timer.Start();
+        }
+
+        private void RestartQuiz(object? obj)
+        {
+            StartQuiz();
         }
 
         private async void AnswerQuestionClick(object? obj)
@@ -173,6 +170,7 @@ namespace Labb_3.ViewModels
             RaisePropertyChanged(nameof(ShuffledAnswers));
             return _shuffledAnswers;
         }
+
         private async void Timer_Tick(object? sender, EventArgs e)
         {
             TimeSpan remaining = TimeSpan.FromSeconds(30) - _stopwatch.Elapsed;
@@ -199,19 +197,19 @@ namespace Labb_3.ViewModels
                 _timer.Start();
             }
         }
-        public List<string> ShuffleOrder(List<string> list)
+        public void ShuffleOrder<T>(IList<T> list)
         {
             Random random = new();
             int lastIndex = list.Count() - 1;
+            
             while (lastIndex > 0)
             {
-                string tempValue = list[lastIndex];
+                T tempValue = list[lastIndex];
                 int randomIndex = random.Next(0, lastIndex);
                 list[lastIndex] = list[randomIndex];
                 list[randomIndex] = tempValue;
                 lastIndex--;
             }
-            return list;
         }
         
     }
