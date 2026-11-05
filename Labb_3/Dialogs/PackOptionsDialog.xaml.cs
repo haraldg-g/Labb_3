@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Labb_3
+namespace Labb_3.Dialogs
 {
     /// <summary>
     /// Interaction logic for PackOptionsDialog.xaml

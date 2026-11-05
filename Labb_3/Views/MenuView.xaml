@@ -17,7 +17,8 @@
     <Grid>
         <Menu>
             <MenuItem Header="_File">
-                <MenuItem Header="_New Question pack" Icon="{fa:Icon FolderPlus}"/>
+                <MenuItem Header="_New Question pack" 
+                          Command="{Binding ConfigurationViewModel.OpenCreateNewQuestionPackCommand}" Icon="{fa:Icon FolderPlus}"/>
                 <MenuItem Header="_Select Question pack" Icon="{fa:Icon FolderOpen}"/>
                 <MenuItem Header="_Delete Question pack" Icon="{fa:Icon FolderMinus}"/>
                 <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" Icon="{fa:Icon CloudArrowDown}"/>
