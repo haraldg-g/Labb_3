@@ -55,5 +55,11 @@ namespace Labb_3.ViewModels
         }
 
         public ObservableCollection<Question> Questions { get; }
+
+        public QuestionPack UpdatePack()
+        {
+            _model.Questions = Questions.ToList();
+            return _model;
+        }
     }
 }

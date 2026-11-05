@@ -22,7 +22,8 @@
                 <MenuItem Header="_Select Question pack" Icon="{fa:Icon FolderOpen}"/>
                 <MenuItem Header="_Delete Question pack" Icon="{fa:Icon FolderMinus}"/>
                 <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" Icon="{fa:Icon CloudArrowDown}"/>
-                <MenuItem Header="E_xit" InputGestureText="Alt+F4" Icon="{fa:Icon DoorOpen}"/>
+                <MenuItem Header="E_xit" InputGestureText="Alt+F4" 
+                          Command="{Binding ExitApplicationCommand}" Icon="{fa:Icon DoorOpen}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Add Question" InputGestureText="Insert" 

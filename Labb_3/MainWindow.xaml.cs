@@ -1,5 +1,6 @@
 ﻿using Labb_3.Models;
 using Labb_3.ViewModels;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,14 @@ namespace Labb_3
             InitializeComponent();
 
             DataContext = new MainWindowViewModel();
+        }
+
+        private void MainWindow_Closing(object? sender, CancelEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel viewModel)
+            {
+                viewModel.SaveQuestionPacks();
+            }
         }
     }
 }
