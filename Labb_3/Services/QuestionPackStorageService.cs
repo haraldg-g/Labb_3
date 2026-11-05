@@ -23,5 +23,18 @@ namespace Labb_3.Services
             string json = JsonSerializer.Serialize(questionPacks);
             File.WriteAllText(_filePath, json);
         }
+
+        public List<QuestionPack> LoadQuestionPacks()
+        {
+
+            List<QuestionPack>? questions = new();
+
+            if (File.Exists(_filePath))
+            {
+                string json = File.ReadAllText(_filePath);
+                questions = JsonSerializer.Deserialize<List<QuestionPack>>(json) ?? new List<QuestionPack>();  // Error exception unhandled med tomma json filer som måste fiaxs
+            }
+            return questions;
+        }
     }
 }

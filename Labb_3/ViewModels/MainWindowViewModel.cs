@@ -52,17 +52,20 @@ internal class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
 
+        foreach (QuestionPack pack in _storageService.LoadQuestionPacks())
+        {
+            Packs.Add(new QuestionPackViewModel(pack));
+        }
+        if (Packs.Count > 0)
+        {
+            ActivePack = Packs[0];
+        }
+
         PlayerViewModel = new PlayerViewModel(this);
         ConfigurationViewModel = new ConfigurationViewModel(this);
 
         CurrentView = ConfigurationViewModel;
 
-        var questionPack = new QuestionPack("Mina frågor!", Difficulty.Medium);
-        questionPack.Questions.Add(new Question("Vad heter sveriges huvudstad?", "Stockholm", "Oslo", "Göteborg", "London"));
-        questionPack.Questions.Add(new Question("Vad är 2 + 3?", "5", "10", "8", "1"));
-
-        ActivePack = new QuestionPackViewModel(questionPack);
-        
         ChangeCurrentViewCommand = new RelayCommand(ChangeCurrentView);
         StartQuizCommand = new RelayCommand(StartQuiz);
         ExitApplicationCommand = new RelayCommand(ExitApplication);

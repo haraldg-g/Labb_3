@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Labb_3.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,9 +18,11 @@ namespace Labb_3.Dialogs
     /// </summary>
     public partial class NewQuestionPackDialog : Window
     {
-        public NewQuestionPackDialog()
+        internal NewQuestionPackDialog(QuestionPackViewModel newPackViewModel)
         {
             InitializeComponent();
+
+            DataContext = newPackViewModel;
         }
     }
 }

@@ -3,12 +3,14 @@ using Labb_3.Command;
 using System.Windows;
 using Labb_3.Dialogs;
 using Labb_3.Views;
+using System.Windows.Forms;
 namespace Labb_3.ViewModels
 {
     internal class ConfigurationViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel? _mainWindowViewModel;
         private Question? _selectedQuestion;
+        private QuestionPackViewModel? _newPackViewModel;
 
 
         public RelayCommand ChangedPackNameCommand { get; }
@@ -16,8 +18,10 @@ namespace Labb_3.ViewModels
         public RelayCommand RemoveQuestionCommand { get; }
         public RelayCommand OpenPackOptionsCommand { get; }
         public RelayCommand OpenCreateNewQuestionPackCommand { get; }
+        public RelayCommand CreateQuestionPackCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         public Array Difficulties => Enum.GetValues(typeof(Difficulty));
+        public QuestionPackViewModel? NewPackViewModel { get => _newPackViewModel; set => SetProperty(ref _newPackViewModel, value); }
 
         public Question? SelectedQuestion
         {
@@ -40,15 +44,18 @@ namespace Labb_3.ViewModels
             RemoveQuestionCommand = new RelayCommand(RemoveQuestion, CanRemoveQuestion);
             OpenPackOptionsCommand = new RelayCommand(OpenPackOptions, CanOpenPackOptions);
             OpenCreateNewQuestionPackCommand = new RelayCommand(OpenCreateNewQuestionPack);
+            CreateQuestionPackCommand = new RelayCommand(CreateQuestionPack);
         }
 
         public void RaiseActivePackChanged() => RaisePropertyChanged(nameof(ActivePack));
 
         private void OpenCreateNewQuestionPack(object? obj)
         {
-            var window = new NewQuestionPackDialog();
-            window.Owner = Application.Current.MainWindow;
-            window.DataContext = this;
+            var newPack = new QuestionPack("<PackName>");
+            var newPackViewModel = new QuestionPackViewModel(newPack);
+            NewPackViewModel = newPackViewModel;
+            var window = new NewQuestionPackDialog(NewPackViewModel);
+            window.Owner = System.Windows.Application.Current.MainWindow;
             window.ShowDialog();
         }
 
@@ -58,9 +65,8 @@ namespace Labb_3.ViewModels
         }
         private void OpenPackOptions(object? obj)
         {
-            
             var window = new PackOptionsDialog();
-            window.Owner = Application.Current.MainWindow;
+            window.Owner = System.Windows.Application.Current.MainWindow;
             window.DataContext = this;
             window.ShowDialog();
         }
@@ -86,6 +92,21 @@ namespace Labb_3.ViewModels
             Question question = new Question("New Question", "", "", "", "");
             ActivePack?.Questions.Add(question);
             SelectedQuestion = question;
+        }
+
+        private void CreateQuestionPack(object? obj)
+        {
+            System.Windows.MessageBox.Show("CreateQuestionPack körs!");
+            if (_mainWindowViewModel == null || NewPackViewModel == null)
+                return;
+
+            _mainWindowViewModel.Packs.Add(NewPackViewModel);
+            _mainWindowViewModel.ActivePack = NewPackViewModel;
+            
+            if (obj is Window window)
+                window.Close();
+
+            NewPackViewModel = null;
         }
 
         private bool CanChangePackName(object? arg)

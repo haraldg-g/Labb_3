@@ -30,7 +30,7 @@ namespace Labb_3.ViewModels
         public RelayCommand AnswerQuestionClickCommand { get; }
         public RelayCommand RestartQuizCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
-        public Question? ActiveQuestion { get => _shuffledQuestions[CurrentQuestionIndex]; }
+        public Question? ActiveQuestion { get => _shuffledQuestions[CurrentQuestionIndex]; }  // Felmedelande Finns inget QuestionPack
         public List<string> ShuffledAnswers { get => _shuffledAnswers; }
         
 

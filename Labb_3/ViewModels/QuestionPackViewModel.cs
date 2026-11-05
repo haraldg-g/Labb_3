@@ -8,7 +8,7 @@ namespace Labb_3.ViewModels
     internal class QuestionPackViewModel : ViewModelBase
     {
         private readonly QuestionPack _model;
-
+        public Array Difficulties => Enum.GetValues(typeof(Difficulty));
         public QuestionPackViewModel(QuestionPack model)
         {
             _model = model;
