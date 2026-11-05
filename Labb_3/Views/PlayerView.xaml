@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:local="Labb_3.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,8 +15,19 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <Grid>
+
+  <Grid>
+    <Grid x:Name="QuizGrid">
+        <Grid.Style>
+            <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                    <DataTrigger Binding="{Binding ShowResults}" Value="True">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -83,5 +95,66 @@
                 <Image Style="{StaticResource AnswerImageStyleIndex3}" />
             </Grid>
         </Grid>
+            <TextBlock 
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                FontSize="30"
+                FontWeight="Bold"
+                Padding="10"
+                Text="{Binding SecondsRemaining}">
+            </TextBlock>
+        </Grid>
+
+    <Grid x:Name="ResultsGrid">
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Setter Property="Visibility" Value="Collapsed"/>
+
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ShowResults}" Value="True">
+                        <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+
+            <StackPanel
+                Orientation="Vertical"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <TextBlock
+                Text="Complete!"
+                FontWeight="Bold"
+                FontSize="50"
+                HorizontalAlignment="Center">
+                </TextBlock>
+
+                <TextBlock  Grid.Row="0"
+                        FontSize="25"
+                        TextAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="You got {0} of {1} correct!">
+                            <Binding Path="CorrectAnswerCounter"/>
+                            <Binding Path="ActivePack.Questions.Count"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <Button HorizontalAlignment="Center" 
+                    Padding="5"
+                    Margin="0,15">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconBlock   
+                            Icon="Rotate"
+                            FontSize="30"
+                            Margin="5,0,10,0"/>
+                        <TextBlock
+                            Text="Restart!"
+                            FontSize="30"
+                            Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
     </Grid>
+  </Grid>
 </UserControl>

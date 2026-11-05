@@ -17,6 +17,7 @@
         <DataTemplate DataType="{x:Type viewmodels:ConfigurationViewModel}">
             <views:ConfigurationView/>
         </DataTemplate>
+
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

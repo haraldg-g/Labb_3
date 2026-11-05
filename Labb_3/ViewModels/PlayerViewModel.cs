@@ -1,7 +1,10 @@
-﻿using Labb_3.Models;
-using Labb_3.Command;
-using System.Windows;
+﻿using Labb_3.Command;
+using Labb_3.Models;
+using Labb_3.Views;
+using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Labb_3.ViewModels
 {
@@ -15,6 +18,12 @@ namespace Labb_3.ViewModels
         private int _correctAnswerIndex;
         private bool _hasAnswered = false;
         private bool _isAnswerCorrect = false;
+        private int _correctAnswerCounter;
+        private bool _showResults;
+        private int _counter = 0;
+        private double _secondsRemaining = 30;
+        private Stopwatch _stopwatch = new();
+        private DispatcherTimer _timer = new();
 
         public RelayCommand NextQuestionCommand { get; }
         public RelayCommand AnswerQuestionClickCommand { get; }
@@ -27,6 +36,9 @@ namespace Labb_3.ViewModels
         public bool HasAnswered { get => _hasAnswered; set => SetProperty(ref _hasAnswered, value); }
         public bool IsAnswerCorrect { get => _isAnswerCorrect; set => SetProperty(ref _isAnswerCorrect, value); }
         public string SelectedAnswer { get => _selectedAnswer; set => SetProperty(ref _selectedAnswer, value); }
+        public int CorrectAnswerCounter { get => _correctAnswerCounter; set => SetProperty(ref _correctAnswerCounter, value); }
+        public bool ShowResults { get => _showResults; set => SetProperty(ref _showResults, value); }
+        public double SecondsRemaining { get => _secondsRemaining; set => SetProperty(ref _secondsRemaining, value); }
 
         public int CurrentQuestionNumber => CurrentQuestionIndex + 1;
 
@@ -53,6 +65,12 @@ namespace Labb_3.ViewModels
         {
             _mainWindowViewModel = mainWindowViewModel;
 
+
+            _stopwatch.Start();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+
             NextQuestionCommand = new RelayCommand(NextQuestion);
             AnswerQuestionClickCommand = new RelayCommand(AnswerQuestionClick);
         }
@@ -74,14 +92,21 @@ namespace Labb_3.ViewModels
 
             IsAnswerCorrect = SelectedAnswerIndex == CorrectAnswerIndex;
 
-            HasAnswered = true;
+            if (IsAnswerCorrect)
+            {
+                CorrectAnswerCounter++;
+            }
 
+            HasAnswered = true;
+            _stopwatch.Stop();
 
             await Task.Delay(3000);
 
-            HasAnswered = false;
-
             NextQuestion(ActivePack);
+            HasAnswered = false;
+            _stopwatch.Restart();
+            SecondsRemaining = 30;
+            _timer.Start();
         }
 
         private void NextQuestion(object? obj)
@@ -97,7 +122,8 @@ namespace Labb_3.ViewModels
             }
             else if (CurrentQuestionIndex == ActivePack.Questions.Count - 1)
             {
-                // Change to final screen command
+                ShowResults = true;
+                _stopwatch.Stop();
             }
         }
 
@@ -110,7 +136,30 @@ namespace Labb_3.ViewModels
             return _shuffledAnswers;
 
         }
+        private async void Timer_Tick(object? sender, EventArgs e)
+        {
+            TimeSpan remaining = TimeSpan.FromSeconds(30) - _stopwatch.Elapsed;
+            SecondsRemaining = Math.Max(0, (int)Math.Ceiling(remaining.TotalSeconds));
+            
 
+            if (SecondsRemaining <= 0)
+            {
+                _timer.Stop();
+                HasAnswered = true;
+                IsAnswerCorrect = true;
+                CorrectAnswerIndex = ShuffledAnswers.IndexOf(ActiveQuestion.CorrectAnswer);
+                SelectedAnswerIndex = CorrectAnswerIndex;
+                AnswerQuestionClick(SelectedAnswer);
+
+                await Task.Delay(3000);
+                NextQuestion(ActivePack);
+                HasAnswered = false;
+                IsAnswerCorrect = false;
+                _stopwatch.Restart();
+                SecondsRemaining = 30;
+                _timer.Start();
+            }
+        }
         public List<string> ShuffleOrder(List<string> list)
         {
             Random random = new();
@@ -125,5 +174,6 @@ namespace Labb_3.ViewModels
             }
             return list;
         }
+        
     }
 }
