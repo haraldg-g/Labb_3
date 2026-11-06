@@ -86,9 +86,7 @@ namespace Labb_3.ViewModels
                 return; 
 
             _timer.Stop();
-            _stopwatch.Restart();
-
-            SecondsRemaining = 30;
+            
             CurrentQuestionIndex = 0;
             HasAnswered = false;
             ShowResults = false;
@@ -97,8 +95,8 @@ namespace Labb_3.ViewModels
             ShuffleOrder(_shuffledQuestions);
             GetActiveQuestionAnswers();
             RaiseActiveQuestionChanged();
+            StartTimer();
 
-            _timer.Start();
         }
 
         private void RestartQuiz(object? obj)
@@ -133,9 +131,7 @@ namespace Labb_3.ViewModels
 
             NextQuestion(ActivePack);
             HasAnswered = false;
-            _stopwatch.Restart();
-            SecondsRemaining = 30;
-            _timer.Start();
+            StartTimer();
         }
 
         private void NextQuestion(object? obj)
@@ -192,10 +188,15 @@ namespace Labb_3.ViewModels
                 NextQuestion(ActivePack);
                 HasAnswered = false;
                 IsAnswerCorrect = false;
-                _stopwatch.Restart();
-                SecondsRemaining = 30;
-                _timer.Start();
+                StartTimer();
             }
+        }
+
+        private void StartTimer()
+        {
+            _stopwatch.Restart();
+            SecondsRemaining = 30;
+            _timer.Start();
         }
         public void ShuffleOrder<T>(IList<T> list)
         {
