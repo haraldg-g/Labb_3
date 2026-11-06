@@ -19,8 +19,27 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New Question pack" 
                           Command="{Binding ConfigurationViewModel.OpenCreateNewQuestionPackCommand}" Icon="{fa:Icon FolderPlus}"/>
-                <MenuItem Header="_Select Question pack" Icon="{fa:Icon FolderOpen}"/>
-                <MenuItem Header="_Delete Question pack" Icon="{fa:Icon FolderMinus}"/>
+                <MenuItem Header="_Select Question pack" 
+                          ItemsSource="{Binding Packs}"
+                          Icon="{fa:Icon FolderOpen}">
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command"
+                                    Value="{Binding DataContext.ConfigurationViewModel.SelectQuestionPackCommand,
+                                    RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}" />
+                            <Setter Property="CommandParameter"
+                                Value="{Binding}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <MenuItem Header="_Delete Question pack" 
+                          Command="{Binding ConfigurationViewModel.DeleteQuestionPackCommand}" Icon="{fa:Icon FolderMinus}"/>
                 <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" Icon="{fa:Icon CloudArrowDown}"/>
                 <MenuItem Header="E_xit" InputGestureText="Alt+F4" 
                           Command="{Binding ExitApplicationCommand}" Icon="{fa:Icon DoorOpen}"/>

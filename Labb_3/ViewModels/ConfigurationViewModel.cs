@@ -19,6 +19,8 @@ namespace Labb_3.ViewModels
         public RelayCommand OpenPackOptionsCommand { get; }
         public RelayCommand OpenCreateNewQuestionPackCommand { get; }
         public RelayCommand CreateQuestionPackCommand { get; }
+        public RelayCommand DeleteQuestionPackCommand { get; }
+        public RelayCommand SelectQuestionPackCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         public Array Difficulties => Enum.GetValues(typeof(Difficulty));
         public QuestionPackViewModel? NewPackViewModel { get => _newPackViewModel; set => SetProperty(ref _newPackViewModel, value); }
@@ -45,6 +47,8 @@ namespace Labb_3.ViewModels
             OpenPackOptionsCommand = new RelayCommand(OpenPackOptions, CanOpenPackOptions);
             OpenCreateNewQuestionPackCommand = new RelayCommand(OpenCreateNewQuestionPack);
             CreateQuestionPackCommand = new RelayCommand(CreateQuestionPack);
+            DeleteQuestionPackCommand = new RelayCommand(DeleteQuestionPack);
+            SelectQuestionPackCommand = new RelayCommand(SelectQuestionPack);
         }
 
         public void RaiseActivePackChanged() => RaisePropertyChanged(nameof(ActivePack));
@@ -96,7 +100,6 @@ namespace Labb_3.ViewModels
 
         private void CreateQuestionPack(object? obj)
         {
-            System.Windows.MessageBox.Show("CreateQuestionPack körs!");
             if (_mainWindowViewModel == null || NewPackViewModel == null)
                 return;
 
@@ -107,6 +110,35 @@ namespace Labb_3.ViewModels
                 window.Close();
 
             NewPackViewModel = null;
+        }
+        private void DeleteQuestionPack(object? obj)
+        {
+            var packToDelete = ActivePack;
+
+            if (_mainWindowViewModel == null || packToDelete == null)
+                return;
+
+            _mainWindowViewModel.Packs.Remove(packToDelete);
+
+            if (_mainWindowViewModel.Packs.Count > 0)
+            {
+                _mainWindowViewModel.ActivePack = _mainWindowViewModel.Packs[0];
+            }
+            else
+            {
+                _mainWindowViewModel.ActivePack = null;
+            }
+
+            RaiseActivePackChanged();
+        }
+
+        private void SelectQuestionPack(object? obj)
+        {
+            if (obj is QuestionPackViewModel pack && _mainWindowViewModel != null)
+            {
+                _mainWindowViewModel.ActivePack = pack;
+                RaiseActivePackChanged();
+            }
         }
 
         private bool CanChangePackName(object? arg)
