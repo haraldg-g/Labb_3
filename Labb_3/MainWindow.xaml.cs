@@ -1,16 +1,6 @@
-﻿using Labb_3.Models;
-using Labb_3.ViewModels;
+﻿using Labb_3.ViewModels;
 using System.ComponentModel;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Labb_3
 {
@@ -29,12 +19,17 @@ namespace Labb_3
             Loaded += async (_, _) => await viewModel.InitializeAsync();
         }
 
-        private void MainWindow_Closing(object? sender, CancelEventArgs e)
+        private async void MainWindow_Closing(object? sender, CancelEventArgs e)
         {
+            e.Cancel = true;
+
             if (DataContext is MainWindowViewModel viewModel)
             {
-                viewModel.SaveQuestionPacks();
+                await viewModel.SaveQuestionPacks();
             }
+
+            Closing -= MainWindow_Closing;
+            Close();
         }
     }
 }
