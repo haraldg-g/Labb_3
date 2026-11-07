@@ -95,9 +95,9 @@ internal class MainWindowViewModel : ViewModelBase
         RaiseCurrentViewChanged();
     }
 
-    public void SaveQuestionPacks()
+    public async Task SaveQuestionPacks()
     {
-        _storageService.SaveQuestionPacks(Packs.Select(pack => pack.UpdatePack()));
+        await _storageService.SaveQuestionPacks(Packs.Select(pack => pack.UpdatePack()));
     }
 
     private void ExitWindow(object? obj)

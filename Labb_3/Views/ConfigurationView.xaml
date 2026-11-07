@@ -114,7 +114,7 @@
                FontWeight="SemiBold"
                TextAlignment="Center"/>
 
-            <TextBlock Text="Select or create a question pack to get started."
+            <TextBlock Text="Create or import a question pack to get started."
                FontSize="14"
                TextAlignment="Center"
                Margin="0,10,0,0"/>

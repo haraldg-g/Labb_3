@@ -19,7 +19,7 @@ namespace Labb_3.Services
 
 
         }
-        public async void SaveQuestionPacks(IEnumerable<QuestionPack> questionPacks)
+        public async Task SaveQuestionPacks(IEnumerable<QuestionPack> questionPacks)
         {
             string json = JsonSerializer.Serialize(questionPacks);
             await File.WriteAllTextAsync(_filePath, json);
