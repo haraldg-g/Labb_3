@@ -2,8 +2,6 @@
 using Labb_3.Command;
 using System.Windows;
 using Labb_3.Dialogs;
-using Labb_3.Views;
-using System.Windows.Forms;
 namespace Labb_3.ViewModels
 {
     internal class ConfigurationViewModel : ViewModelBase
@@ -12,8 +10,6 @@ namespace Labb_3.ViewModels
         private Question? _selectedQuestion;
         private QuestionPackViewModel? _newPackViewModel;
 
-
-        public RelayCommand ChangedPackNameCommand { get; }
         public RelayCommand AddQuestionCommand { get; }
         public RelayCommand RemoveQuestionCommand { get; }
         public RelayCommand OpenPackOptionsCommand { get; }
@@ -22,8 +18,8 @@ namespace Labb_3.ViewModels
         public RelayCommand DeleteQuestionPackCommand { get; }
         public RelayCommand SelectQuestionPackCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
-        public Array Difficulties => Enum.GetValues(typeof(Difficulty));
         public QuestionPackViewModel? NewPackViewModel { get => _newPackViewModel; set => SetProperty(ref _newPackViewModel, value); }
+        public static Array Difficulties => Enum.GetValues(typeof(Difficulty));
 
         public Question? SelectedQuestion
         {
@@ -41,7 +37,6 @@ namespace Labb_3.ViewModels
         {
             _mainWindowViewModel = mainWindowViewModel;
 
-            ChangedPackNameCommand = new RelayCommand(ChangePackName, CanChangePackName);
             AddQuestionCommand = new RelayCommand(AddQuestion, CanAddQuestion);
             RemoveQuestionCommand = new RelayCommand(RemoveQuestion, CanRemoveQuestion);
             OpenPackOptionsCommand = new RelayCommand(OpenPackOptions, CanOpenPackOptions);
@@ -109,6 +104,8 @@ namespace Labb_3.ViewModels
             if (obj is Window window)
                 window.Close();
 
+            _mainWindowViewModel.ShowConfigurationView();
+
             NewPackViewModel = null;
         }
         private void DeleteQuestionPack(object? obj)
@@ -116,6 +113,9 @@ namespace Labb_3.ViewModels
             var packToDelete = ActivePack;
 
             if (_mainWindowViewModel == null || packToDelete == null)
+                return;
+
+            if (!ConfirmDeletion($"Are you sure you want to delete {packToDelete.Name}"))
                 return;
 
             _mainWindowViewModel.Packs.Remove(packToDelete);
@@ -138,17 +138,12 @@ namespace Labb_3.ViewModels
             {
                 _mainWindowViewModel.ActivePack = pack;
                 RaiseActivePackChanged();
-            }
+                _mainWindowViewModel.ShowConfigurationView();
+            } 
         }
-
-        private bool CanChangePackName(object? arg)
+        private bool ConfirmDeletion(string message)
         {
-            return ActivePack?.Name != string.Empty;
-        }
-
-        private void ChangePackName(object? obj)
-        {
-            throw new NotImplementedException();
+            return MessageBox.Show(message, "Delete question pack?", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
         }
     }
 }

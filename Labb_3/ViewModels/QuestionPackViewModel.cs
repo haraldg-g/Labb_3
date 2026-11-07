@@ -27,7 +27,6 @@ namespace Labb_3.ViewModels
                 RaisePropertyChanged();
             }
         }
-
         public Difficulty Difficulty
         {
             get => _model.Difficulty;

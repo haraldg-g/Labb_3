@@ -6,33 +6,37 @@
              xmlns:local="clr-namespace:Labb_3.Views"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="200">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Labb_3;component/Styles/DialogStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <StackPanel Orientation="Vertical">
             <TextBlock 
+                Style="{StaticResource TextBlockStyle}"
                 Margin="10,20,10,0"
-                Text="Pack Name:" 
-                FontWeight="Bold" >
-            </TextBlock>
+                Text="Pack Name:" />
 
             <TextBox 
                 Margin="10,0,10,0"
                 Text="{Binding Name,
                 Mode=TwoWay,
-                UpdateSourceTrigger=PropertyChanged}">
-            </TextBox>
+                UpdateSourceTrigger=PropertyChanged}" />
 
-           <TextBlock 
-                Margin="10,10,10,0"
-                Text="Difficulty:" 
-                FontWeight="Bold" >
-                </TextBlock>
+            <TextBlock 
+                Style="{StaticResource TextBlockStyle}"
+                Text="Difficulty:" />
 
             <ComboBox 
                 Margin="10,0,10,0"
                 ItemsSource="{Binding Difficulties}"
                 SelectedItem="{Binding Difficulty, 
-                Mode=TwoWay}" >
-            </ComboBox>
+                Mode=TwoWay}" />
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -42,24 +46,19 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock 
-                    Margin="10,10,10,0"
-                    Text="Time Limit:" 
-                    FontWeight="Bold" >
-                </TextBlock>
+                    Style="{StaticResource TextBlockStyle}"
+                    Text="Time Limit:" />
 
                 <TextBlock 
                     Grid.Column="1"
-                    Margin="0,10,5,0"
-                    Text="{Binding Value, ElementName=TimeLimitSlider}" 
-                    FontWeight="Bold" >
-                </TextBlock>
+                    Style="{StaticResource TextBlockStyle}"
+                    Margin="0,10,0,0"
+                    Text="{Binding Value, ElementName=TimeLimitSlider}"  />
 
                 <TextBlock 
                     Grid.Column="2"
-                    Margin="0,10,10,0"
-                    Text="seconds" 
-                    FontWeight="Bold" >
-                </TextBlock>
+                    Style="{StaticResource TextBlockStyle}"
+                    Text="seconds" />
             </Grid>
 
             <Slider   
@@ -68,8 +67,7 @@
                 Value="{Binding TimeLimitInSeconds, Mode=TwoWay}"
                 Minimum="5" Maximum="120"
                 IsSnapToTickEnabled="True"
-                TickPlacement="BottomRight" TickFrequency="5">
-            </Slider>
+                TickPlacement="BottomRight" TickFrequency="5"/>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -77,23 +75,18 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-
                 <Button 
                     Grid.Column="0" 
-                    Margin="0,10"
+                    Style="{StaticResource ButtonStyle}"
                     Content="Cancel"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Width="50"/>
+                    Command="{Binding Owner.DataContext.ExitWindowCommand,
+                              RelativeSource={RelativeSource AncestorType=Window}}"/>
                 <Button 
                     Grid.Column="1"
-                    Margin="0,10"
+                    Style="{StaticResource ButtonStyle}"
                     Content="Create"
-                    HorizontalAlignment="Center"
-                    Width="50"
                     Command="{Binding Owner.DataContext.ConfigurationViewModel.CreateQuestionPackCommand,
-                              RelativeSource={RelativeSource AncestorType=Window}}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                              RelativeSource={RelativeSource AncestorType=Window}}"/>
             </Grid>
         </StackPanel>
     </Grid>

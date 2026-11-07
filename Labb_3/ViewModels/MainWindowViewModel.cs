@@ -2,9 +2,7 @@
 using Labb_3.Models;
 using Labb_3.Services;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
-using static Labb_3.ViewModels.MainWindowViewModel;
 
 namespace Labb_3.ViewModels;
 
@@ -13,13 +11,14 @@ internal class MainWindowViewModel : ViewModelBase
     private object? _currentView;
     private QuestionPackViewModel? _activePack;
     private readonly QuestionPackStorageService _storageService = new();
-
+    
     public PlayerViewModel? PlayerViewModel { get; }
     public ConfigurationViewModel? ConfigurationViewModel { get; }
     public ObservableCollection<QuestionPackViewModel> Packs { get; set; } = new();
-    public RelayCommand? ChangeCurrentViewCommand { get; }
+    public RelayCommand ShowConfigurationViewCommand { get; }
     public RelayCommand? StartQuizCommand { get; }
     public RelayCommand ExitApplicationCommand { get; }
+    public RelayCommand ExitWindowCommand { get; }
 
     public bool CanPlay => CurrentView != PlayerViewModel;
     public bool CanEdit => CurrentView != ConfigurationViewModel;
@@ -51,43 +50,44 @@ internal class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-
-        foreach (QuestionPack pack in _storageService.LoadQuestionPacks())
-        {
-            Packs.Add(new QuestionPackViewModel(pack));
-        }
-        if (Packs.Count > 0)
-        {
-            ActivePack = Packs[0];
-        }
-
         PlayerViewModel = new PlayerViewModel(this);
         ConfigurationViewModel = new ConfigurationViewModel(this);
 
         CurrentView = ConfigurationViewModel;
 
-        ChangeCurrentViewCommand = new RelayCommand(ChangeCurrentView);
+        LoadQuestionPacks();
+
+        ShowConfigurationViewCommand = new RelayCommand(ShowConfigurationView);
         StartQuizCommand = new RelayCommand(StartQuiz);
         ExitApplicationCommand = new RelayCommand(ExitApplication);
+        ExitWindowCommand = new RelayCommand(ExitWindow);
     }
 
     public void RaiseCurrentViewChanged() => RaisePropertyChanged(nameof(CurrentView));
 
-    public void ChangeCurrentView(object? obj)
+    public void ChangeCurrentView(object? viewModel)
     {
-        if (CurrentView == ConfigurationViewModel)
-        {
-            CurrentView = PlayerViewModel;
-        }
-        else if (CurrentView == PlayerViewModel)
-        {
-            CurrentView = ConfigurationViewModel;
-        }
+        CurrentView = viewModel;
     }
+
+    public void ShowPlayerView()
+    {
+        ChangeCurrentView(PlayerViewModel);
+    }
+    public void ShowConfigurationView()
+    {
+        ChangeCurrentView(ConfigurationViewModel);
+    }
+
+    private void ShowConfigurationView(object? obj)
+    {
+        ShowConfigurationView();
+    }
+
     private void StartQuiz(object? obj)
     {
         PlayerViewModel?.StartQuiz();
-        ChangeCurrentView(CurrentView);
+        ShowPlayerView();
         RaiseCurrentViewChanged();
     }
 
@@ -96,9 +96,29 @@ internal class MainWindowViewModel : ViewModelBase
         _storageService.SaveQuestionPacks(Packs.Select(pack => pack.UpdatePack()));
     }
 
+    private void ExitWindow(object? obj)
+    {
+        if (obj is Window window)
+        {
+            window.Close();
+        }
+    }
+
     private void ExitApplication(object? obj)
     {
         Application.Current.MainWindow?.Close();
+    }
+
+    public void LoadQuestionPacks()
+    {
+        foreach (QuestionPack pack in _storageService.LoadQuestionPacks())
+        {
+            Packs.Add(new QuestionPackViewModel(pack));
+        }
+        if (Packs.Count > 0)
+        {
+            ActivePack = Packs[0];
+        }
     }
 }
 

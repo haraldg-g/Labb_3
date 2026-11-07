@@ -32,7 +32,7 @@ namespace Labb_3.ViewModels
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         public Question? ActiveQuestion { get => _shuffledQuestions[CurrentQuestionIndex]; }  // Felmedelande Finns inget QuestionPack
         public List<string> ShuffledAnswers { get => _shuffledAnswers; }
-        
+        public int CurrentQuestionNumber => CurrentQuestionIndex + 1;
 
         public int CorrectAnswerIndex { get => _correctAnswerIndex; set => SetProperty(ref _correctAnswerIndex, value); }
         public int SelectedAnswerIndex { get => _selectAnswerIndex; set => SetProperty(ref _selectAnswerIndex, value); }
@@ -41,11 +41,8 @@ namespace Labb_3.ViewModels
         public string? SelectedAnswer { get => _selectedAnswer; set => SetProperty(ref _selectedAnswer, value); }
         public int CorrectAnswerCounter { get => _correctAnswerCounter; set => SetProperty(ref _correctAnswerCounter, value); }
         public bool ShowResults { get => _showResults; set => SetProperty(ref _showResults, value); }
-
-
         public double SecondsRemaining { get => _secondsRemaining; set => SetProperty(ref _secondsRemaining, value); }
 
-        public int CurrentQuestionNumber => CurrentQuestionIndex + 1;
 
         public int CurrentQuestionIndex 
         { 
@@ -154,7 +151,6 @@ namespace Labb_3.ViewModels
 
         public List<string> GetActiveQuestionAnswers()
         {
-
             Question? activeQuestion = ActiveQuestion;
 
             if (activeQuestion == null)
@@ -198,6 +194,7 @@ namespace Labb_3.ViewModels
             SecondsRemaining = 30;
             _timer.Start();
         }
+
         public void ShuffleOrder<T>(IList<T> list)
         {
             Random random = new();
@@ -212,6 +209,5 @@ namespace Labb_3.ViewModels
                 lastIndex--;
             }
         }
-        
     }
 }

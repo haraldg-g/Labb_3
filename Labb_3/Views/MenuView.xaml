@@ -58,7 +58,7 @@
                           IsEnabled="{Binding CanPlay}"
                           Icon="{fa:Icon Play}"/>
                 <MenuItem Header="_Edit" InputGestureText="Ctrl+E" 
-                          Command="{Binding ChangeCurrentViewCommand}" 
+                          Command="{Binding ShowConfigurationViewCommand}" 
                           IsEnabled="{Binding CanEdit}"
                           Icon="{fa:Icon Gears}"/>
                 <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter" 

@@ -3,15 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:local="clr-namespace:Labb_3.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Button}" x:Key="ButtonStyle">
+            <Setter Property="Width" Value="20" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockStyle">
+            <Setter Property="Margin" Value="20,10,0,0" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style TargetType="TextBox" x:Key="TextBoxStyle">
+            <Setter Property="Margin" Value="20,0,20,0" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-
 
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
@@ -28,42 +44,31 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                    Grid.Row="0"
-                    FontSize="12"
-                    Margin="10,5,0,5"
-                    FontWeight="Bold"
-                    Text="{Binding ActivePack.Name}" >
-                </TextBlock>
+                           Grid.Row="0"
+                           FontSize="12"
+                           Margin="10,5,0,5"
+                           FontWeight="Bold"
+                           Text="{Binding ActivePack.Name}" />
 
-                <Button Content="☷"
-                    Grid.Column="1"
-                    Width="20"
-                    Height="20"
-                    Margin="2"
-                    Command="{Binding OpenPackOptionsCommand}" />
+                <Button Grid.Column="1"
+                        Content="{fa:Icon Sliders}"
+                        Style="{StaticResource ButtonStyle}"
+                        Command="{Binding OpenPackOptionsCommand}" />
 
-                <Button Content="+"
-                    Grid.Column="2"
-                    Width="20"
-                    Height="20"
-                    Margin="2"
-                    Command="{Binding AddQuestionCommand}" />
+                <Button Grid.Column="2"
+                        Content="{fa:Icon Plus}"
+                        Style="{StaticResource ButtonStyle}"
+                        Command="{Binding AddQuestionCommand}" />
 
-                <Button Content="−"
-                    Grid.Column="3"
-                    Width="20"
-                    Height="20"
-                    Margin="2"
-                    Command="{Binding RemoveQuestionCommand}" />
+                <Button Grid.Column="3"
+                        Content="{fa:Icon Minus}"
+                        Style="{StaticResource ButtonStyle}"
+                        Command="{Binding RemoveQuestionCommand}" />
             </Grid>
 
-            <!-- Övre delen: namn och knappar -->
-           
-
-            <!-- Nedre delen: separat yta för frågorna -->
             <ListBox Grid.Row="1"
-            ItemsSource="{Binding ActivePack.Questions}"
-            SelectedItem="{Binding SelectedQuestion}">
+                     ItemsSource="{Binding ActivePack.Questions}"
+                     SelectedItem="{Binding SelectedQuestion}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Query}" />
@@ -72,39 +77,36 @@
             </ListBox>
         </Grid>
 
-
         <StackPanel Grid.Column="1">
-            <TextBlock Text="Question:" Margin="20,20,0,0" />
-            <TextBox Margin="20,2,20,0" Height="100"
+            <TextBlock Text="Question:" Style="{StaticResource TextBlockStyle}" />
+            <TextBox Style="{StaticResource TextBoxStyle}" Height="100"
                 Text="{Binding SelectedQuestion.Query,
                 Mode=TwoWay,
                 UpdateSourceTrigger=PropertyChanged}" />
-            
-            <TextBlock Text="Correct Answer:" Margin="20,40,0,0" />
-            <TextBox Margin="20,0,20,0" 
+
+            <TextBlock Text="Correct Answer:" Style="{StaticResource TextBlockStyle}" />
+            <TextBox Style="{StaticResource TextBoxStyle}" 
                 Text="{Binding SelectedQuestion.CorrectAnswer,
                 Mode=TwoWay,
                 UpdateSourceTrigger=PropertyChanged}" />
-            
-            <TextBlock Text="First Incorrect Answer:" Margin="20,10 ,0,0" />
-            <TextBox Margin="20,0,20,0" 
+
+            <TextBlock Text="First Incorrect Answer:" Style="{StaticResource TextBlockStyle}" />
+            <TextBox Style="{StaticResource TextBoxStyle}"
                 Text="{Binding SelectedQuestion.IncorrectAnswers[0],
                 Mode=TwoWay,
                 UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Text="Second Incorrect Answer:" Margin="20,10 ,0,0" />
-            <TextBox Margin="20,0,20,0" 
+            <TextBlock Text="Second Incorrect Answer:" Style="{StaticResource TextBlockStyle}" />
+            <TextBox Style="{StaticResource TextBoxStyle}"
                 Text="{Binding SelectedQuestion.IncorrectAnswers[1],
                 Mode=TwoWay,
                 UpdateSourceTrigger=PropertyChanged}" />
-            
-            <TextBlock Text="Third Incorrect Answer:" Margin="20,10 ,0,0" />
-            <TextBox Margin="20,0,20,0"
+
+            <TextBlock Text="Third Incorrect Answer:" Style="{StaticResource TextBlockStyle}" />
+            <TextBox Style="{StaticResource TextBoxStyle}"
                 Text="{Binding SelectedQuestion.IncorrectAnswers[2],
                 Mode=TwoWay,
                 UpdateSourceTrigger=PropertyChanged}" />
-
         </StackPanel>
-        
     </Grid>
 </UserControl>
