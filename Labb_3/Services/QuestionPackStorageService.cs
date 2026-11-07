@@ -1,6 +1,7 @@
 ﻿using Labb_3.Models;
 using System.Text.Json;
 using System.IO;
+using System.Windows;
 
 
 namespace Labb_3.Services
@@ -18,21 +19,33 @@ namespace Labb_3.Services
 
 
         }
-        public void SaveQuestionPacks(IEnumerable<QuestionPack> questionPacks)
+        public async void SaveQuestionPacks(IEnumerable<QuestionPack> questionPacks)
         {
             string json = JsonSerializer.Serialize(questionPacks);
-            File.WriteAllText(_filePath, json);
+            await File.WriteAllTextAsync(_filePath, json);
         }
 
-        public List<QuestionPack> LoadQuestionPacks()
+        public async Task<List<QuestionPack>> LoadQuestionPacksAsync()
         {
 
             List<QuestionPack>? questions = new();
 
             if (File.Exists(_filePath))
             {
-                string json = File.ReadAllText(_filePath);
-                questions = JsonSerializer.Deserialize<List<QuestionPack>>(json) ?? new List<QuestionPack>();  // Error exception unhandled med tomma json filer som måste fiaxs
+                try
+                {
+                    string json = await File.ReadAllTextAsync(_filePath);
+                    questions = JsonSerializer.Deserialize<List<QuestionPack>>(json) ?? new List<QuestionPack>();  
+                }
+                catch (JsonException)
+                {
+                    MessageBoxResult result = MessageBox.Show("The saved question pack file contains invalid or corrupted data and could not be loaded. \n\nYour previously saved question packs will not be available", "Question Pack Load Error", MessageBoxButton.OKCancel);
+                    
+                    if (result == MessageBoxResult.Cancel)
+                    {
+                        Application.Current.MainWindow?.Close();
+                    }
+                }
             }
             return questions;
         }

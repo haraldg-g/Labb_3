@@ -1,10 +1,6 @@
 ﻿using Labb_3.Command;
 using Labb_3.Models;
-using Labb_3.Views;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Windows;
 using System.Windows.Threading;
 
 namespace Labb_3.ViewModels
@@ -30,10 +26,19 @@ namespace Labb_3.ViewModels
         public RelayCommand AnswerQuestionClickCommand { get; }
         public RelayCommand RestartQuizCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
-        public Question? ActiveQuestion { get => _shuffledQuestions[CurrentQuestionIndex]; } 
         public List<(string Answer, bool IsCorrect)> ShuffledAnswers { get => _shuffledAnswers; }
         public int CurrentQuestionNumber => CurrentQuestionIndex + 1;
         public List<string> ShuffledAnswerTexts => ShuffledAnswers.Select(answer => answer.Answer).ToList();
+        public Question? ActiveQuestion
+        {
+            get
+            {
+                if (CurrentQuestionIndex < 0 || CurrentQuestionIndex >= _shuffledQuestions.Count)
+                    return null;
+
+                return _shuffledQuestions[CurrentQuestionIndex];
+            }
+        }
 
         public int CorrectAnswerIndex { get => _correctAnswerIndex; set => SetProperty(ref _correctAnswerIndex, value); }
         public int SelectedAnswerIndex { get => _selectAnswerIndex; set => SetProperty(ref _selectAnswerIndex, value); }
@@ -84,7 +89,8 @@ namespace Labb_3.ViewModels
                 return; 
 
             _timer.Stop();
-            
+
+            CorrectAnswerCounter = 0;
             CurrentQuestionIndex = 0;
             HasAnswered = false;
             ShowResults = false;

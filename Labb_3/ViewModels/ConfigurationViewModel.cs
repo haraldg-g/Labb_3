@@ -20,6 +20,8 @@ namespace Labb_3.ViewModels
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         public QuestionPackViewModel? NewPackViewModel { get => _newPackViewModel; set => SetProperty(ref _newPackViewModel, value); }
         public static Array Difficulties => Enum.GetValues(typeof(Difficulty));
+        public bool HasActivePack => ActivePack != null;
+        public bool HasQuestion => ActivePack?.Questions.Count != 0;
 
         public Question? SelectedQuestion
         {
@@ -47,6 +49,8 @@ namespace Labb_3.ViewModels
         }
 
         public void RaiseActivePackChanged() => RaisePropertyChanged(nameof(ActivePack));
+        public void RaiseHasActivePackChanged() => RaisePropertyChanged(nameof(HasActivePack));
+        public void RaiseHasQuestionChanged() => RaisePropertyChanged(nameof(HasQuestion));
 
         private void OpenCreateNewQuestionPack(object? obj)
         {
@@ -78,11 +82,12 @@ namespace Labb_3.ViewModels
             if (SelectedQuestion == null)
                 return;
 
-            ActivePack?.Questions.Remove(SelectedQuestion);          
+            ActivePack?.Questions.Remove(SelectedQuestion);
+            RaiseHasQuestionChanged();
             SelectedQuestion = null;
             _mainWindowViewModel?.StartQuizCommand.RaiseCanExecuteChanged();
         }
-        private bool CanAddQuestion(object? arg)
+        private bool CanAddQuestion(object? arg)  
         {
             return _mainWindowViewModel?.CurrentView is not PlayerViewModel && _mainWindowViewModel?.ActivePack != null;
         }
@@ -90,6 +95,7 @@ namespace Labb_3.ViewModels
         {
             Question question = new Question("New Question", "", "", "", "");
             ActivePack?.Questions.Add(question);
+            RaiseHasQuestionChanged();
             SelectedQuestion = question;
             _mainWindowViewModel?.StartQuizCommand.RaiseCanExecuteChanged();
         }
@@ -137,6 +143,7 @@ namespace Labb_3.ViewModels
             }
 
             RaiseActivePackChanged();
+            RaiseHasActivePackChanged();
         }
 
         private void SelectQuestionPack(object? obj)
@@ -145,6 +152,7 @@ namespace Labb_3.ViewModels
             {
                 _mainWindowViewModel.ActivePack = pack;
                 RaiseActivePackChanged();
+                RaiseHasActivePackChanged();
                 _mainWindowViewModel.ShowConfigurationView();
             } 
         }

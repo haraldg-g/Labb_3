@@ -23,7 +23,10 @@ namespace Labb_3
         {
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel();
+            var viewModel = new MainWindowViewModel();
+            DataContext = viewModel;
+
+            Loaded += async (_, _) => await viewModel.InitializeAsync();
         }
 
         private void MainWindow_Closing(object? sender, CancelEventArgs e)

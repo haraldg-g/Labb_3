@@ -13,7 +13,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     </UserControl.Resources>
-    
+
     <Grid>
         <Menu>
             <MenuItem Header="_File">
@@ -56,7 +56,7 @@
                 <MenuItem Header="_Play" InputGestureText="Ctrl+P" 
                           Command="{Binding StartQuizCommand}" 
                           IsEnabled="{Binding CanPlay}"
-                          Icon="{fa:Icon Play}"/>
+                          Icon="{fa:Icon Play}" />
                 <MenuItem Header="_Edit" InputGestureText="Ctrl+E" 
                           Command="{Binding ShowConfigurationViewCommand}" 
                           IsEnabled="{Binding CanEdit}"

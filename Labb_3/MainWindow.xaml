@@ -18,8 +18,17 @@
         <DataTemplate DataType="{x:Type viewmodels:ConfigurationViewModel}">
             <views:ConfigurationView/>
         </DataTemplate>
-
     </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding StartQuizCommand}"/>
+        <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding ShowConfigurationViewCommand}"/>
+        <KeyBinding Key="Insert" Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding ConfigurationViewModel.OpenPackOptionsCommand}"/>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitApplicationCommand}"/>
+    </Window.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

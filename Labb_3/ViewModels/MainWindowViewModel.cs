@@ -22,6 +22,7 @@ internal class MainWindowViewModel : ViewModelBase
 
     public bool CanPlay => CurrentView != PlayerViewModel;
     public bool CanEdit => CurrentView != ConfigurationViewModel;
+    
 
     public object? CurrentView
     {
@@ -44,6 +45,7 @@ internal class MainWindowViewModel : ViewModelBase
             if(SetProperty(ref _activePack, value))
             {
                 ConfigurationViewModel?.RaiseActivePackChanged();
+                ConfigurationViewModel?.RaiseHasActivePackChanged();
             }
         }
     }
@@ -54,8 +56,6 @@ internal class MainWindowViewModel : ViewModelBase
         ConfigurationViewModel = new ConfigurationViewModel(this);
 
         CurrentView = ConfigurationViewModel;
-
-        LoadQuestionPacks();
 
         ShowConfigurationViewCommand = new RelayCommand(ShowConfigurationView);
         StartQuizCommand = new RelayCommand(StartQuiz, CanStartQuiz);
@@ -113,16 +113,35 @@ internal class MainWindowViewModel : ViewModelBase
         Application.Current.MainWindow?.Close();
     }
 
-    public void LoadQuestionPacks()
+    public async Task LoadQuestionPacks()
     {
-        foreach (QuestionPack pack in _storageService.LoadQuestionPacks())
+        foreach (QuestionPack pack in await _storageService.LoadQuestionPacksAsync())
         {
-            Packs.Add(new QuestionPackViewModel(pack));
+            QuestionPack packCheck = new("");
+
+            foreach (Question question in pack.Questions)
+            {
+                if (question.CorrectAnswer != null && question.IncorrectAnswers != null && question.IncorrectAnswers.Length == 3)
+                {
+                    packCheck.Questions.Add(question);
+                }
+            }
+            packCheck.Name = pack.Name;
+            Packs.Add(new QuestionPackViewModel(packCheck));
         }
         if (Packs.Count > 0)
         {
             ActivePack = Packs[0];
         }
+
+        ConfigurationViewModel?.RaiseHasQuestionChanged();
+        ConfigurationViewModel?.AddQuestionCommand.RaiseCanExecuteChanged();
+        ConfigurationViewModel?.OpenPackOptionsCommand.RaiseCanExecuteChanged();
+    }
+
+    public async Task InitializeAsync()
+    {
+        await LoadQuestionPacks();
     }
 }
 

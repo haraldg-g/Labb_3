@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="{x:Type Button}" x:Key="ButtonStyle">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Margin" Value="2" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="TextBlockStyle">
+        <Setter Property="Margin" Value="20,10,0,0" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style TargetType="TextBox" x:Key="TextBoxStyle">
+        <Setter Property="Margin" Value="20,0,20,0" />
+    </Style>
+
+    <Style TargetType="{x:Type StackPanel}" x:Key="CreatePackToContinuePanel">
+        <Setter Property="Visibility" Value="Visible"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding HasActivePack}" Value="True">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style TargetType="{x:Type StackPanel}" x:Key="EditQuestionPanel">
+        <Setter Property="Visibility" Value="Collapsed"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding HasActivePack}" Value="True">
+                <Setter Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding HasQuestion}" Value="False">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+</ResourceDictionary>
