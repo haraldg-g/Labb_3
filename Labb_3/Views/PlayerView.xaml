@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="Labb_3.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -63,35 +64,35 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0" Grid.Column="0">
-                <Button 
+                    <Button 
                     Style="{StaticResource AnswerButtonStyle}"
-                    Content="{Binding ShuffledAnswers[0]}"
+                    Content="{Binding ShuffledAnswerTexts[0]}"
                     Command="{Binding AnswerQuestionClickCommand}"
-                    CommandParameter="{Binding ShuffledAnswers[0]}" />
+                    CommandParameter="0" />
                 <Image Style="{StaticResource AnswerImageStyleIndex0}" />
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1">
                 <Button 
                     Style="{StaticResource AnswerButtonStyle}"
-                    Content="{Binding ShuffledAnswers[1]}"
+                    Content="{Binding ShuffledAnswerTexts[1]}"
                     Command="{Binding AnswerQuestionClickCommand}"
-                    CommandParameter="{Binding ShuffledAnswers[1]}"/>
+                    CommandParameter="1"/>
                 <Image Style="{StaticResource AnswerImageStyleIndex1}" />
             </Grid>
             <Grid Grid.Row="1" Grid.Column="0">
                 <Button 
                     Style="{StaticResource AnswerButtonStyle}"
-                    Content="{Binding ShuffledAnswers[2]}"
+                    Content="{Binding ShuffledAnswerTexts[2]}"
                     Command="{Binding AnswerQuestionClickCommand}"
-                    CommandParameter="{Binding ShuffledAnswers[2]}"/>
+                    CommandParameter="2"/>
                 <Image Style="{StaticResource AnswerImageStyleIndex2}" />
             </Grid>
             <Grid Grid.Row="1" Grid.Column="1">
                 <Button 
                     Style="{StaticResource AnswerButtonStyle}"
-                    Content="{Binding ShuffledAnswers[3]}"
+                    Content="{Binding ShuffledAnswerTexts[3]}"
                     Command="{Binding AnswerQuestionClickCommand}"
-                    CommandParameter="{Binding ShuffledAnswers[3]}"/>
+                    CommandParameter="3"/>
                 <Image Style="{StaticResource AnswerImageStyleIndex3}" />
             </Grid>
         </Grid>

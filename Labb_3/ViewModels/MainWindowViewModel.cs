@@ -16,7 +16,7 @@ internal class MainWindowViewModel : ViewModelBase
     public ConfigurationViewModel? ConfigurationViewModel { get; }
     public ObservableCollection<QuestionPackViewModel> Packs { get; set; } = new();
     public RelayCommand ShowConfigurationViewCommand { get; }
-    public RelayCommand? StartQuizCommand { get; }
+    public RelayCommand StartQuizCommand { get; }
     public RelayCommand ExitApplicationCommand { get; }
     public RelayCommand ExitWindowCommand { get; }
 
@@ -58,7 +58,7 @@ internal class MainWindowViewModel : ViewModelBase
         LoadQuestionPacks();
 
         ShowConfigurationViewCommand = new RelayCommand(ShowConfigurationView);
-        StartQuizCommand = new RelayCommand(StartQuiz);
+        StartQuizCommand = new RelayCommand(StartQuiz, CanStartQuiz);
         ExitApplicationCommand = new RelayCommand(ExitApplication);
         ExitWindowCommand = new RelayCommand(ExitWindow);
     }
@@ -82,6 +82,10 @@ internal class MainWindowViewModel : ViewModelBase
     private void ShowConfigurationView(object? obj)
     {
         ShowConfigurationView();
+    }
+    private bool CanStartQuiz(object? arg)
+    {
+        return ActivePack != null && ActivePack.Questions.Count > 0;
     }
 
     private void StartQuiz(object? obj)

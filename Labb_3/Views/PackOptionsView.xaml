@@ -35,8 +35,7 @@
                 Margin="10,0,10,0"
                 ItemsSource="{Binding Difficulties}"
                 SelectedItem="{Binding ActivePack.Difficulty, 
-                Mode=TwoWay}" >
-            </ComboBox>
+                Mode=TwoWay}" />
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -69,8 +68,7 @@
                 Value="{Binding ActivePack.TimeLimitInSeconds, Mode=TwoWay}"
                 Minimum="5" Maximum="120"
                 IsSnapToTickEnabled="True"
-                TickPlacement="BottomRight" TickFrequency="5">
-            </Slider>
+                TickPlacement="BottomRight" TickFrequency="5" />
         </StackPanel>
     </Grid>
 </UserControl>

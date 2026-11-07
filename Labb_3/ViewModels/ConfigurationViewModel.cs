@@ -60,7 +60,7 @@ namespace Labb_3.ViewModels
 
         private bool CanOpenPackOptions(object? arg)
         {
-            return _mainWindowViewModel?.CurrentView is not PlayerViewModel;
+            return _mainWindowViewModel?.CurrentView is not PlayerViewModel && _mainWindowViewModel?.ActivePack != null;
         }
         private void OpenPackOptions(object? obj)
         {
@@ -78,19 +78,20 @@ namespace Labb_3.ViewModels
             if (SelectedQuestion == null)
                 return;
 
-            ActivePack?.Questions.Remove(SelectedQuestion);
+            ActivePack?.Questions.Remove(SelectedQuestion);          
             SelectedQuestion = null;
-
+            _mainWindowViewModel?.StartQuizCommand.RaiseCanExecuteChanged();
         }
         private bool CanAddQuestion(object? arg)
         {
-            return _mainWindowViewModel?.CurrentView is not PlayerViewModel;
+            return _mainWindowViewModel?.CurrentView is not PlayerViewModel && _mainWindowViewModel?.ActivePack != null;
         }
         private void AddQuestion(object? obj)
         {
             Question question = new Question("New Question", "", "", "", "");
             ActivePack?.Questions.Add(question);
             SelectedQuestion = question;
+            _mainWindowViewModel?.StartQuizCommand.RaiseCanExecuteChanged();
         }
 
         private void CreateQuestionPack(object? obj)
@@ -100,7 +101,10 @@ namespace Labb_3.ViewModels
 
             _mainWindowViewModel.Packs.Add(NewPackViewModel);
             _mainWindowViewModel.ActivePack = NewPackViewModel;
-            
+            AddQuestionCommand.RaiseCanExecuteChanged();
+            OpenPackOptionsCommand.RaiseCanExecuteChanged();
+            _mainWindowViewModel.StartQuizCommand.RaiseCanExecuteChanged();
+
             if (obj is Window window)
                 window.Close();
 
@@ -127,6 +131,9 @@ namespace Labb_3.ViewModels
             else
             {
                 _mainWindowViewModel.ActivePack = null;
+                AddQuestionCommand.RaiseCanExecuteChanged();
+                OpenPackOptionsCommand.RaiseCanExecuteChanged();
+                _mainWindowViewModel.StartQuizCommand.RaiseCanExecuteChanged();
             }
 
             RaiseActivePackChanged();

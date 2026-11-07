@@ -13,8 +13,8 @@ namespace Labb_3.ViewModels
     {
         private readonly MainWindowViewModel? _mainWindowViewModel;
         private int _currentQuestionIndex;
-        private string? _selectedAnswer;
-        private List<string> _shuffledAnswers = new();
+        private (string, bool) _selectedAnswer;
+        private List<(string, bool)> _shuffledAnswers = new();
         private int _selectAnswerIndex;
         private int _correctAnswerIndex;
         private bool _hasAnswered = false;
@@ -30,15 +30,16 @@ namespace Labb_3.ViewModels
         public RelayCommand AnswerQuestionClickCommand { get; }
         public RelayCommand RestartQuizCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
-        public Question? ActiveQuestion { get => _shuffledQuestions[CurrentQuestionIndex]; }  // Felmedelande Finns inget QuestionPack
-        public List<string> ShuffledAnswers { get => _shuffledAnswers; }
+        public Question? ActiveQuestion { get => _shuffledQuestions[CurrentQuestionIndex]; } 
+        public List<(string Answer, bool IsCorrect)> ShuffledAnswers { get => _shuffledAnswers; }
         public int CurrentQuestionNumber => CurrentQuestionIndex + 1;
+        public List<string> ShuffledAnswerTexts => ShuffledAnswers.Select(answer => answer.Answer).ToList();
 
         public int CorrectAnswerIndex { get => _correctAnswerIndex; set => SetProperty(ref _correctAnswerIndex, value); }
         public int SelectedAnswerIndex { get => _selectAnswerIndex; set => SetProperty(ref _selectAnswerIndex, value); }
         public bool HasAnswered { get => _hasAnswered; set => SetProperty(ref _hasAnswered, value); }
         public bool IsAnswerCorrect { get => _isAnswerCorrect; set => SetProperty(ref _isAnswerCorrect, value); }
-        public string? SelectedAnswer { get => _selectedAnswer; set => SetProperty(ref _selectedAnswer, value); }
+        public (string Answer, bool IsCorrect) SelectedAnswer { get => _selectedAnswer; set => SetProperty(ref _selectedAnswer, value); }
         public int CorrectAnswerCounter { get => _correctAnswerCounter; set => SetProperty(ref _correctAnswerCounter, value); }
         public bool ShowResults { get => _showResults; set => SetProperty(ref _showResults, value); }
         public double SecondsRemaining { get => _secondsRemaining; set => SetProperty(ref _secondsRemaining, value); }
@@ -79,7 +80,7 @@ namespace Labb_3.ViewModels
 
         public void StartQuiz()
         {
-            if (ActivePack == null)
+            if (ActivePack == null || ActivePack.Questions.Count == 0)
                 return; 
 
             _timer.Stop();
@@ -106,19 +107,16 @@ namespace Labb_3.ViewModels
             if (HasAnswered)
                 return;
 
-            if (obj is not string answer || ActiveQuestion == null)
+            if (obj is not string indexstring || !int.TryParse(indexstring, out int index) || ActiveQuestion == null )
                 return;
 
-            SelectedAnswer = answer;
+            SelectedAnswerIndex = index;
+            SelectedAnswer = ShuffledAnswers[SelectedAnswerIndex];
 
-            SelectedAnswerIndex = ShuffledAnswers.IndexOf(SelectedAnswer);
-            CorrectAnswerIndex = ShuffledAnswers.IndexOf(ActiveQuestion.CorrectAnswer);
-
-            IsAnswerCorrect = SelectedAnswerIndex == CorrectAnswerIndex;
-
-            if (IsAnswerCorrect)
+            if (SelectedAnswer.IsCorrect)
             {
                 CorrectAnswerCounter++;
+                IsAnswerCorrect = true;
             }
 
             HasAnswered = true;
@@ -128,6 +126,7 @@ namespace Labb_3.ViewModels
 
             NextQuestion(ActivePack);
             HasAnswered = false;
+            IsAnswerCorrect = false;
             StartTimer();
         }
 
@@ -149,18 +148,20 @@ namespace Labb_3.ViewModels
             }
         }
 
-        public List<string> GetActiveQuestionAnswers()
+        public void GetActiveQuestionAnswers()
         {
             Question? activeQuestion = ActiveQuestion;
 
             if (activeQuestion == null)
-                return new List<string>();
-            
-            List<string> list = new List<string> { activeQuestion.CorrectAnswer, activeQuestion.IncorrectAnswers[0], activeQuestion.IncorrectAnswers[1], activeQuestion.IncorrectAnswers[2] };
+                return;
+            CorrectAnswerIndex = 0;
+
+            List<(string answer, bool isCorrect)> list = new List<(string, bool)> { (activeQuestion.CorrectAnswer, true), (activeQuestion.IncorrectAnswers[0], false), (activeQuestion.IncorrectAnswers[1], false), (activeQuestion.IncorrectAnswers[2], false) };
             _shuffledAnswers = list;
             ShuffleOrder(_shuffledAnswers);
+            CorrectAnswerIndex = _shuffledAnswers.IndexOf((activeQuestion.CorrectAnswer, true));
             RaisePropertyChanged(nameof(ShuffledAnswers));
-            return _shuffledAnswers;
+            RaisePropertyChanged(nameof(ShuffledAnswerTexts));
         }
 
         private async void Timer_Tick(object? sender, EventArgs e)
@@ -176,7 +177,7 @@ namespace Labb_3.ViewModels
                 _timer.Stop();
                 HasAnswered = true;
                 IsAnswerCorrect = true;
-                CorrectAnswerIndex = ShuffledAnswers.IndexOf(ActiveQuestion.CorrectAnswer);
+                CorrectAnswerIndex = ShuffledAnswers.IndexOf((ActiveQuestion.CorrectAnswer, true));
                 SelectedAnswerIndex = CorrectAnswerIndex;
                 AnswerQuestionClick(SelectedAnswer);
 
