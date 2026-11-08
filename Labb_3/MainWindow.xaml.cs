@@ -1,5 +1,7 @@
-﻿using Labb_3.ViewModels;
+﻿using Labb_3.Services;
+using Labb_3.ViewModels;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 
 namespace Labb_3
@@ -22,14 +24,20 @@ namespace Labb_3
         private async void MainWindow_Closing(object? sender, CancelEventArgs e)
         {
             e.Cancel = true;
-
-            if (DataContext is MainWindowViewModel viewModel)
+            
+            try
             {
-                await viewModel.SaveQuestionPacks();
-            }
+                if (DataContext is MainWindowViewModel viewModel)
+                {
+                   bool canClose = await viewModel.SaveQuestionPacks();
 
-            Closing -= MainWindow_Closing;
-            Close();
+                    if (canClose)
+                    {
+                        Closing -= MainWindow_Closing;
+                        Close();
+                    }
+                }
+            }
         }
     }
 }

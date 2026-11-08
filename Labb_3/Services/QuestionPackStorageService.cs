@@ -9,6 +9,7 @@ namespace Labb_3.Services
     class QuestionPackStorageService
     {
         private string _filePath;
+   
 
         public QuestionPackStorageService()
         {
@@ -25,6 +26,12 @@ namespace Labb_3.Services
             await File.WriteAllTextAsync(_filePath, json);
         }
 
+        public async Task SaveQuestionPacksToNewFile(IEnumerable<QuestionPack> questionPacks, string filePath)
+        {
+            string json = JsonSerializer.Serialize(questionPacks);
+            await File.WriteAllTextAsync(filePath, json);
+        }
+
         public async Task<List<QuestionPack>> LoadQuestionPacksAsync()
         {
 
@@ -32,20 +39,8 @@ namespace Labb_3.Services
 
             if (File.Exists(_filePath))
             {
-                try
-                {
-                    string json = await File.ReadAllTextAsync(_filePath);
-                    questions = JsonSerializer.Deserialize<List<QuestionPack>>(json) ?? new List<QuestionPack>();  
-                }
-                catch (JsonException)
-                {
-                    MessageBoxResult result = MessageBox.Show("The saved question pack file contains invalid or corrupted data and could not be loaded. \n\nYour previously saved question packs will not be available", "Question Pack Load Error", MessageBoxButton.OKCancel);
-                    
-                    if (result == MessageBoxResult.Cancel)
-                    {
-                        Application.Current.MainWindow?.Close();
-                    }
-                }
+                string json = await File.ReadAllTextAsync(_filePath);
+                questions = JsonSerializer.Deserialize<List<QuestionPack>>(json) ?? new List<QuestionPack>();
             }
             return questions;
         }
