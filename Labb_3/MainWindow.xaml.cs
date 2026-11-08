@@ -24,9 +24,7 @@ namespace Labb_3
         private async void MainWindow_Closing(object? sender, CancelEventArgs e)
         {
             e.Cancel = true;
-            
-            try
-            {
+
                 if (DataContext is MainWindowViewModel viewModel)
                 {
                    bool canClose = await viewModel.SaveQuestionPacks();
@@ -38,6 +36,5 @@ namespace Labb_3
                     }
                 }
             }
-        }
     }
 }

@@ -17,7 +17,7 @@ namespace Labb_3.ViewModels
         private bool _isAnswerCorrect = false;
         private int _correctAnswerCounter;
         private bool _showResults;
-        private double _secondsRemaining = 30;
+        private double _secondsRemaining;
         private Stopwatch _stopwatch = new();
         private DispatcherTimer _timer = new();
         private List<Question> _shuffledQuestions = new();
@@ -172,11 +172,12 @@ namespace Labb_3.ViewModels
 
         private async void Timer_Tick(object? sender, EventArgs e)
         {
-            TimeSpan remaining = TimeSpan.FromSeconds(30) - _stopwatch.Elapsed;
-            SecondsRemaining = Math.Max(0, (int)Math.Ceiling(remaining.TotalSeconds));
-
-            if (ActiveQuestion == null)
+            
+            if (ActiveQuestion == null || ActivePack == null)
                 return;
+
+            TimeSpan remaining = TimeSpan.FromSeconds(ActivePack.TimeLimitInSeconds) - _stopwatch.Elapsed;
+            SecondsRemaining = Math.Max(0, (int)Math.Ceiling(remaining.TotalSeconds));
 
             if (SecondsRemaining <= 0)
             {
@@ -197,8 +198,11 @@ namespace Labb_3.ViewModels
 
         private void StartTimer()
         {
+            if (ActivePack == null)
+                return;
+
             _stopwatch.Restart();
-            SecondsRemaining = 30;
+            SecondsRemaining = ActivePack.TimeLimitInSeconds;
             _timer.Start();
         }
 

@@ -6,6 +6,7 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using Microsoft.Win32;
+using Labb_3.Views;
 
 namespace Labb_3.ViewModels;
 
@@ -35,11 +36,14 @@ internal class MainWindowViewModel : ViewModelBase
 
     public PlayerViewModel? PlayerViewModel { get; }
     public ConfigurationViewModel? ConfigurationViewModel { get; }
+    public ImportQuestionsViewModel? ImportQuestionsViewModel { get; }
     public ObservableCollection<QuestionPackViewModel> Packs { get; set; } = new();
+    public ObservableCollection<TriviaCategory> Categories { get; set; } = new();
     public RelayCommand ShowConfigurationViewCommand { get; }
     public RelayCommand StartQuizCommand { get; }
     public RelayCommand ExitApplicationCommand { get; }
     public RelayCommand ExitWindowCommand { get; }
+    
 
     public bool CanPlay => CurrentView != PlayerViewModel;
     public bool CanEdit => CurrentView != ConfigurationViewModel;
@@ -75,6 +79,7 @@ internal class MainWindowViewModel : ViewModelBase
     {
         PlayerViewModel = new PlayerViewModel(this);
         ConfigurationViewModel = new ConfigurationViewModel(this);
+        ImportQuestionsViewModel = new ImportQuestionsViewModel(this);
 
         CurrentView = ConfigurationViewModel;
 
@@ -168,7 +173,6 @@ internal class MainWindowViewModel : ViewModelBase
 
     public async Task LoadQuestionPacks()
     {
-
         try
         {
             foreach (QuestionPack pack in await _storageService.LoadQuestionPacksAsync())
@@ -223,6 +227,7 @@ internal class MainWindowViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
+        await ImportQuestionsViewModel.ImportCategoriesAsync();
         await LoadQuestionPacks();
     }
 }

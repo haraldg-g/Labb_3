@@ -40,7 +40,8 @@
                 </MenuItem>
                 <MenuItem Header="_Delete Question pack" 
                           Command="{Binding ConfigurationViewModel.DeleteQuestionPackCommand}" Icon="{fa:Icon FolderMinus}"/>
-                <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" Icon="{fa:Icon CloudArrowDown}"/>
+                <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" 
+                          Command="{Binding ConfigurationViewModel.OpenImportQuestionPackCommand}" Icon="{fa:Icon CloudArrowDown}"/>
                 <MenuItem Header="E_xit" InputGestureText="Alt+F4" 
                           Command="{Binding ExitApplicationCommand}" Icon="{fa:Icon DoorOpen}"/>
             </MenuItem>

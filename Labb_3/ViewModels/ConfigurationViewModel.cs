@@ -2,6 +2,8 @@
 using Labb_3.Command;
 using System.Windows;
 using Labb_3.Dialogs;
+using Labb_3.Enums;
+
 namespace Labb_3.ViewModels
 {
     internal class ConfigurationViewModel : ViewModelBase
@@ -17,9 +19,11 @@ namespace Labb_3.ViewModels
         public RelayCommand CreateQuestionPackCommand { get; }
         public RelayCommand DeleteQuestionPackCommand { get; }
         public RelayCommand SelectQuestionPackCommand { get; }
+        public RelayCommand OpenImportQuestionPackCommand { get; }
         public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         public QuestionPackViewModel? NewPackViewModel { get => _newPackViewModel; set => SetProperty(ref _newPackViewModel, value); }
-        public static Array Difficulties => Enum.GetValues(typeof(Difficulty));
+        public Array DifficultiesList => Enum.GetValues(typeof(Difficulties));
+
         public bool HasActivePack => ActivePack != null;
         public bool HasQuestion => ActivePack?.Questions.Count != 0;
 
@@ -46,11 +50,22 @@ namespace Labb_3.ViewModels
             CreateQuestionPackCommand = new RelayCommand(CreateQuestionPack);
             DeleteQuestionPackCommand = new RelayCommand(DeleteQuestionPack);
             SelectQuestionPackCommand = new RelayCommand(SelectQuestionPack);
+            OpenImportQuestionPackCommand = new RelayCommand(OpenImportQuestionPack);
         }
 
         public void RaiseActivePackChanged() => RaisePropertyChanged(nameof(ActivePack));
         public void RaiseHasActivePackChanged() => RaisePropertyChanged(nameof(HasActivePack));
         public void RaiseHasQuestionChanged() => RaisePropertyChanged(nameof(HasQuestion));
+
+
+
+        private void OpenImportQuestionPack(object? obj)
+        {
+            var newImportQuestionViewModel = new ImportQuestionsViewModel(_mainWindowViewModel);
+            var window = new ImportQuestionsDialog(newImportQuestionViewModel);
+            window.Owner = System.Windows.Application.Current.MainWindow;
+            window.ShowDialog();
+        }
 
         private void OpenCreateNewQuestionPack(object? obj)
         {

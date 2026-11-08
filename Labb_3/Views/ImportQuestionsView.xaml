@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="Labb_3.Views.ImportQuestionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Labb_3.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="250">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Labb_3;component/Styles/DialogStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <StackPanel>
+            <TextBlock 
+            Style="{StaticResource TextBlockStyle}"
+            Margin="10,20,10,0"
+            Text="Category:" />
+
+            <ComboBox 
+                Margin="10,0,10,0"
+                ItemsSource="{Binding Categories}"
+                DisplayMemberPath="Name"
+                SelectedValuePath="Id"
+                SelectedValue="{Binding SelectedCategoryId, 
+                Mode=TwoWay}" />
+
+            <TextBlock 
+            Style="{StaticResource TextBlockStyle}"
+            Text="Difficulty:" />
+
+            <ComboBox 
+            ItemsSource="{Binding DifficultiesList}"
+            SelectedValue="{Binding SelectedDifficulty}"
+            Margin="10,0,10,0"
+            SelectedItem="" />
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                Grid.Column="0"
+                Style="{StaticResource TextBlockStyle}"
+                Text="Amount of Questions:" />
+
+                <TextBlock 
+                Grid.Column="1"
+                Style="{StaticResource TextBlockStyle}"
+                Text="{Binding Value, ElementName=TimeLimitSlider}" />
+
+            </Grid>
+
+            <Slider 
+                Grid.Row="5"
+                Margin="10,5,10,0"
+                x:Name="TimeLimitSlider"
+                Value="{Binding AmountOfQuestions, Mode=TwoWay}"
+                Minimum="1" Maximum="20"
+                IsSnapToTickEnabled="True"
+                TickPlacement="BottomRight" TickFrequency="1" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button 
+                    Grid.Column="0" 
+                    Style="{StaticResource ButtonStyle}"
+                    Content="Cancel"
+                    Command="{Binding Owner.DataContext.ExitWindowCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Button 
+                    Grid.Column="1"
+                    Style="{StaticResource ButtonStyle}"
+                    Content="Import"
+                    Command="{Binding ImportQuestionsCommand}"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

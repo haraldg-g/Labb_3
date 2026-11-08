@@ -33,7 +33,7 @@
 
             <ComboBox 
                 Margin="10,0,10,0"
-                ItemsSource="{Binding Difficulties}"
+                ItemsSource="{Binding DifficultiesList}"
                 SelectedItem="{Binding ActivePack.Difficulty, 
                 Mode=TwoWay}" />
 
@@ -65,7 +65,8 @@
                 Grid.Row="5"
                 Margin="10,5,10,0"
                 x:Name="TimeLimitSlider"
-                Value="{Binding ActivePack.TimeLimitInSeconds, Mode=TwoWay}"
+                Value="{Binding ActivePack.TimeLimitInSeconds, Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged}"
                 Minimum="5" Maximum="120"
                 IsSnapToTickEnabled="True"
                 TickPlacement="BottomRight" TickFrequency="5" />

@@ -1,14 +1,14 @@
 ﻿using Labb_3.Models;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using Labb_3.Enums;
 
 namespace Labb_3.ViewModels
 {
     internal class QuestionPackViewModel : ViewModelBase
     {
         private readonly QuestionPack _model;
-        public Array Difficulties => Enum.GetValues(typeof(Difficulty));
+        public Array DifficultiesList => Enum.GetValues(typeof(Difficulties));
+
         public QuestionPackViewModel(QuestionPack model)
         {
             _model = model;
@@ -27,7 +27,7 @@ namespace Labb_3.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public Difficulty Difficulty
+        public Difficulties Difficulty
         {
             get => _model.Difficulty;
             set
