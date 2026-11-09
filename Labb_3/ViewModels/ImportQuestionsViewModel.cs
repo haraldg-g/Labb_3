@@ -3,8 +3,11 @@ using Labb_3.Enums;
 using Labb_3.Models;
 using Labb_3.Services;
 using System.Collections.ObjectModel;
+using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Windows;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Labb_3.ViewModels
 {
@@ -46,6 +49,8 @@ namespace Labb_3.ViewModels
             await ImportQuestionsAsync();
 
             var newPackViewModel = new QuestionPackViewModel(QuestionPack);
+            _mainWindowViewModel?.Packs.Add(newPackViewModel);
+
             _mainWindowViewModel?.ActivePack = newPackViewModel;
             _mainWindowViewModel?.ConfigurationViewModel?.SelectedQuestion = QuestionPack.Questions[0];
 
@@ -59,7 +64,8 @@ namespace Labb_3.ViewModels
 
             var options = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
 
             string json = await _triviaService.GetCategoriesAsync();
@@ -78,7 +84,8 @@ namespace Labb_3.ViewModels
 
             var options = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
 
             string json = await _triviaService.ImportQuestionsAsync(SelectedCategoryId,SelectedDifficulty,AmountOfQuestions);
@@ -90,11 +97,18 @@ namespace Labb_3.ViewModels
                 return;
 
             QuestionPack = new QuestionPack(selectedCategory.Name, SelectedDifficulty);
+            
 
             foreach (Question question in result.Results)
             {
                 if (question.CorrectAnswer != null && question.IncorrectAnswers != null && question.IncorrectAnswers.Length == 3)
                 {
+                    question.Query = WebUtility.HtmlDecode(question.Query);
+                    question.CorrectAnswer = WebUtility.HtmlDecode(question.CorrectAnswer);
+                    question.IncorrectAnswers[0] = WebUtility.HtmlDecode(question.IncorrectAnswers[0]);
+                    question.IncorrectAnswers[1] = WebUtility.HtmlDecode(question.IncorrectAnswers[1]);
+                    question.IncorrectAnswers[2] = WebUtility.HtmlDecode(question.IncorrectAnswers[2]);
+
                     questionListImport.Add(question);
                 }
             }

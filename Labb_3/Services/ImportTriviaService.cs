@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Labb_3.Services
 {
@@ -32,10 +33,11 @@ namespace Labb_3.Services
         {
             string diff = difficulty.ToString().ToLower();
             
-            var response = await _httpClient.GetAsync($"https://opentdb.com/api.php?amount={amount}&category={categoryId}&difficulty={diff}");
+            var response = await _httpClient.GetAsync($"https://opentdb.com/api.php?amount={amount}&category={categoryId}&difficulty={diff}&type=multiple");
             var result = await response.Content.ReadAsStringAsync();
 
             return result;
         }
+
     }
 }
