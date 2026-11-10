@@ -8,6 +8,7 @@ namespace Labb_3.ViewModels
     {
         private readonly QuestionPack _model;
         public Array DifficultiesList => Enum.GetValues(typeof(Difficulties));
+        public ObservableCollection<Question> Questions { get; }
 
         public QuestionPackViewModel(QuestionPack model)
         {
@@ -27,6 +28,7 @@ namespace Labb_3.ViewModels
                 RaisePropertyChanged();
             }
         }
+
         public Difficulties Difficulty
         {
             get => _model.Difficulty;
@@ -52,8 +54,6 @@ namespace Labb_3.ViewModels
                 RaisePropertyChanged();
             }
         }
-
-        public ObservableCollection<Question> Questions { get; }
 
         public QuestionPack UpdatePack()
         {

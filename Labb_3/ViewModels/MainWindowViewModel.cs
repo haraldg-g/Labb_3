@@ -6,7 +6,6 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using Microsoft.Win32;
-using Labb_3.Views;
 
 namespace Labb_3.ViewModels;
 
@@ -16,7 +15,6 @@ internal class MainWindowViewModel : ViewModelBase
     private QuestionPackViewModel? _activePack;
     private readonly QuestionPackStorageService _storageService = new();
     private bool _canSave = true;
-    
 
     public PlayerViewModel? PlayerViewModel { get; }
     public ConfigurationViewModel? ConfigurationViewModel { get; }
@@ -26,11 +24,9 @@ internal class MainWindowViewModel : ViewModelBase
     public RelayCommand StartQuizCommand { get; }
     public RelayCommand ExitApplicationCommand { get; }
     public RelayCommand ExitWindowCommand { get; }
-    
 
     public bool CanPlay => CurrentView != PlayerViewModel;
     public bool CanEdit => CurrentView != ConfigurationViewModel;
-    
 
     public object? CurrentView
     {

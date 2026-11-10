@@ -49,7 +49,6 @@ namespace Labb_3.ViewModels
         public bool ShowResults { get => _showResults; set => SetProperty(ref _showResults, value); }
         public double SecondsRemaining { get => _secondsRemaining; set => SetProperty(ref _secondsRemaining, value); }
 
-
         public int CurrentQuestionIndex 
         { 
             get => _currentQuestionIndex;

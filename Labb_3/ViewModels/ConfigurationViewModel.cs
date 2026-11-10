@@ -58,8 +58,6 @@ namespace Labb_3.ViewModels
         public void RaiseHasActivePackChanged() => RaisePropertyChanged(nameof(HasActivePack));
         public void RaiseHasQuestionChanged() => RaisePropertyChanged(nameof(HasQuestion));
 
-
-
         private void OpenImportQuestionPack(object? obj)
         {
             if (_mainWindowViewModel == null)
@@ -81,7 +79,6 @@ namespace Labb_3.ViewModels
 
             await _newImportQuestionViewModel.ImportCategoriesAsync();
         }
-        
 
         private void OpenCreateNewQuestionPack(object? obj)
         {
@@ -97,6 +94,7 @@ namespace Labb_3.ViewModels
         {
             return _mainWindowViewModel?.CurrentView is not PlayerViewModel && _mainWindowViewModel?.ActivePack != null;
         }
+
         private void OpenPackOptions(object? obj)
         {
             var window = new PackOptionsDialog();
@@ -104,10 +102,12 @@ namespace Labb_3.ViewModels
             window.DataContext = this;
             window.ShowDialog();
         }
+
         private bool CanRemoveQuestion(object? arg)
         {
             return SelectedQuestion != null && _mainWindowViewModel?.CurrentView is not PlayerViewModel;
         }
+
         private void RemoveQuestion(object? obj)
         {
             if (SelectedQuestion == null)
@@ -118,6 +118,7 @@ namespace Labb_3.ViewModels
             SelectedQuestion = null;
             _mainWindowViewModel?.StartQuizCommand.RaiseCanExecuteChanged();
         }
+
         private bool CanAddQuestion(object? arg)  
         {
             return _mainWindowViewModel?.CurrentView is not PlayerViewModel && _mainWindowViewModel?.ActivePack != null;
@@ -149,6 +150,7 @@ namespace Labb_3.ViewModels
 
             NewPackViewModel = null;
         }
+
         private void DeleteQuestionPack(object? obj)
         {
             var packToDelete = ActivePack;
@@ -187,6 +189,7 @@ namespace Labb_3.ViewModels
                 _mainWindowViewModel.ShowConfigurationView();
             } 
         }
+
         private bool ConfirmDeletion(string message)
         {
             return MessageBox.Show(message, "Delete question pack?", MessageBoxButton.YesNo) == MessageBoxResult.Yes;

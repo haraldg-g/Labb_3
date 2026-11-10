@@ -8,7 +8,6 @@ using System.Net.Http;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Windows;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Labb_3.ViewModels
 {
@@ -23,7 +22,6 @@ namespace Labb_3.ViewModels
         private readonly MainWindowViewModel _mainWindowViewModel;
         private QuestionPack? _questionPack;
         
-        
         public ObservableCollection<TriviaCategory> Categories { get => _mainWindowViewModel.Categories; }
         public QuestionPack? QuestionPack { get => _questionPack; set => SetProperty(ref _questionPack, value); }
         public Array DifficultiesList => Enum.GetValues(typeof(Difficulties));
@@ -31,7 +29,6 @@ namespace Labb_3.ViewModels
         public Difficulties SelectedDifficulty { get => _selectedDifficulty; set => SetProperty(ref _selectedDifficulty, value); }
         public int AmountOfQuestions { get => _amountOfQuestions; set => SetProperty(ref _amountOfQuestions, value); }
         public RelayCommand ImportQuestionsCommand { get; }
-
 
         public ImportQuestionsViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -154,9 +151,7 @@ namespace Labb_3.ViewModels
                     _filteredQuestionsCounter++;
                 }
             }
-
-            QuestionPack.Questions = questionListImport;
-            
+            QuestionPack.Questions = questionListImport;  
         }
     }    
 }
