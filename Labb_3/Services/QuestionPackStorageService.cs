@@ -18,7 +18,6 @@ namespace Labb_3.Services
             Directory.CreateDirectory(appPath);
             _filePath = Path.Combine(appPath, "QuestionPacks.json"); 
 
-
         }
         public async Task SaveQuestionPacks(IEnumerable<QuestionPack> questionPacks)
         {

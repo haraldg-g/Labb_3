@@ -16,27 +16,10 @@ internal class MainWindowViewModel : ViewModelBase
     private QuestionPackViewModel? _activePack;
     private readonly QuestionPackStorageService _storageService = new();
     private bool _canSave = true;
-    private string? GetNewFilePath()
-    {
-        SaveFileDialog dialog = new SaveFileDialog
-        {
-            Title = "Save Question Packs",
-            Filter = "JSON files (*.json)|*.json",
-            DefaultExt = ".json",
-            FileName = "QuestionPacks.json"
-        };
-
-        if (dialog.ShowDialog() == true)
-        {
-            return dialog.FileName;
-        }
-
-        return null;
-    }
+    
 
     public PlayerViewModel? PlayerViewModel { get; }
     public ConfigurationViewModel? ConfigurationViewModel { get; }
-    public ImportQuestionsViewModel? ImportQuestionsViewModel { get; }
     public ObservableCollection<QuestionPackViewModel> Packs { get; set; } = new();
     public ObservableCollection<TriviaCategory> Categories { get; set; } = new();
     public RelayCommand ShowConfigurationViewCommand { get; }
@@ -79,7 +62,6 @@ internal class MainWindowViewModel : ViewModelBase
     {
         PlayerViewModel = new PlayerViewModel(this);
         ConfigurationViewModel = new ConfigurationViewModel(this);
-        ImportQuestionsViewModel = new ImportQuestionsViewModel(this);
 
         CurrentView = ConfigurationViewModel;
 
@@ -119,6 +101,24 @@ internal class MainWindowViewModel : ViewModelBase
         PlayerViewModel?.StartQuiz();
         ShowPlayerView();
         RaiseCurrentViewChanged();
+    }
+
+    private string? GetNewFilePath()
+    {
+        SaveFileDialog dialog = new SaveFileDialog
+        {
+            Title = "Save Question Packs",
+            Filter = "JSON files (*.json)|*.json",
+            DefaultExt = ".json",
+            FileName = "QuestionPacks.json"
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            return dialog.FileName;
+        }
+
+        return null;
     }
 
     public async Task<bool> SaveQuestionPacks()
@@ -227,7 +227,6 @@ internal class MainWindowViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
-        await ImportQuestionsViewModel.ImportCategoriesAsync();
         await LoadQuestionPacks();
     }
 }

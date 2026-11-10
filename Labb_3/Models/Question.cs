@@ -21,6 +21,9 @@ namespace Labb_3.Models
 
         public Question()
         {
+            Query = string.Empty;
+            CorrectAnswer = string.Empty;
+            IncorrectAnswers = Array.Empty<string>();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Labb_3.Models
         public int ResponseCode { get; set; }
 
         [JsonPropertyName("results")]
-        public List<Question> Results { get; set; }
+        public List<Question> Results { get; set; } = new();
 
     }
 }

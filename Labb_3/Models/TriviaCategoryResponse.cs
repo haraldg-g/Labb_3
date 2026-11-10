@@ -8,7 +8,7 @@ namespace Labb_3.Models
     internal class TriviaCategoryResponse
     {
         [JsonPropertyName("trivia_categories")]
-        public List<TriviaCategory> TriviaCategoriesList { get; set; }
+        public List<TriviaCategory> TriviaCategoriesList { get; set; } = new();
 
 
     }

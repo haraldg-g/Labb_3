@@ -11,6 +11,7 @@ namespace Labb_3.ViewModels
         private readonly MainWindowViewModel? _mainWindowViewModel;
         private Question? _selectedQuestion;
         private QuestionPackViewModel? _newPackViewModel;
+        private ImportQuestionsViewModel? _newImportQuestionViewModel;
 
         public RelayCommand AddQuestionCommand { get; }
         public RelayCommand RemoveQuestionCommand { get; }
@@ -61,11 +62,26 @@ namespace Labb_3.ViewModels
 
         private void OpenImportQuestionPack(object? obj)
         {
-            var newImportQuestionViewModel = new ImportQuestionsViewModel(_mainWindowViewModel);
-            var window = new ImportQuestionsDialog(newImportQuestionViewModel);
+            if (_mainWindowViewModel == null)
+                return;
+
+            _newImportQuestionViewModel = new ImportQuestionsViewModel(_mainWindowViewModel);
+            ImportCategories();
+
+            var window = new ImportQuestionsDialog(_newImportQuestionViewModel);
             window.Owner = System.Windows.Application.Current.MainWindow;
             window.ShowDialog();
+
         }
+
+        private async void ImportCategories()
+        {
+            if (_newImportQuestionViewModel == null)
+                return;
+
+            await _newImportQuestionViewModel.ImportCategoriesAsync();
+        }
+        
 
         private void OpenCreateNewQuestionPack(object? obj)
         {
