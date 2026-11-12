@@ -8,7 +8,8 @@
         xmlns:viewmodels="clr-namespace:Labb_3.ViewModels"
         xmlns:views="clr-namespace:Labb_3.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Labb3 Quiz App" Height="450" Width="800"
+        Icon="Images/favicon.ico"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:PlayerViewModel}" >
@@ -27,6 +28,8 @@
         <KeyBinding Key="Delete" Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}"/>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding ConfigurationViewModel.OpenPackOptionsCommand}"/>
         <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitApplicationCommand}"/>
+        <KeyBinding Key="I" Modifiers="Ctrl" Command="{Binding ConfigurationViewModel.OpenImportQuestionPackCommand}" />
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding ConfigurationViewModel.OpenCreateNewQuestionPackCommand}" />
     </Window.InputBindings>
 
     <Grid>

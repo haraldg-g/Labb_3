@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Images\Correct.png" />
+    <None Remove="Images\favicon.ico" />
     <None Remove="Images\Incorrect.png" />
   </ItemGroup>
 
@@ -19,6 +20,7 @@
 
   <ItemGroup>
     <Resource Include="Images\Correct.png" />
+    <Resource Include="Images\favicon.ico" />
     <Resource Include="Images\Incorrect.png" />
   </ItemGroup>
 
